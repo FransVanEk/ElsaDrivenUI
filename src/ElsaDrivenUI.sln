@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElsaEngine", "ElsaEngine\ElsaEngine.csproj", "{E4972834-7D9E-4EBA-A498-DA8AFC9DA512}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElsaDrivenWebApp", "ElsaDrivenWebApp\ElsaDrivenWebApp.csproj", "{3747A470-7ABC-4CF1-8B4C-5A71D213B8D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElsaDrivenWebApp", "ElsaDrivenWebApp\ElsaDrivenWebApp.csproj", "{3747A470-7ABC-4CF1-8B4C-5A71D213B8D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserTask.AddOns", "UserTaskSignal\UserTask.AddOns.csproj", "{3A4998ED-CD70-4AEE-882D-CA5CB24BEAA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3747A470-7ABC-4CF1-8B4C-5A71D213B8D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3747A470-7ABC-4CF1-8B4C-5A71D213B8D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3747A470-7ABC-4CF1-8B4C-5A71D213B8D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A4998ED-CD70-4AEE-882D-CA5CB24BEAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A4998ED-CD70-4AEE-882D-CA5CB24BEAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A4998ED-CD70-4AEE-882D-CA5CB24BEAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A4998ED-CD70-4AEE-882D-CA5CB24BEAA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

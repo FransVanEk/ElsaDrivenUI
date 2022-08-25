@@ -2,6 +2,7 @@
 using Elsa.Activities.Http.Options;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
 using Elsa.Persistence.EntityFramework.Sqlite;
+using UserTask.AddOns;
 
 namespace ElsaEngine
 {
@@ -29,12 +30,13 @@ namespace ElsaEngine
                         { BasePath = "", BaseUrl = new Uri(elsaServerUrl) };
                     })
                     .AddQuartzTemporalActivities()
+                    .AddUserTaskSignalActivities()
                     .AddWorkflowsFrom<Startup>()
-                );
+                ); ;
 
             // Elsa API endpoints.
-            services.AddElsaApiEndpoints();
-
+            services.AddElsaApiEndpoints()
+                .AddElsaSwagger(); 
             // For Dashboard.
             services.AddRazorPages();
         }
@@ -44,6 +46,8 @@ namespace ElsaEngine
                 .UseStaticFiles() // For Dashboard.
                 .UseHttpActivities()
                 .UseRouting()
+                .UseSwagger()
+                .UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "FNB API V1"); })
                 .UseEndpoints(endpoints =>
                 {
                     // Elsa API Endpoints are implemented as regular ASP.NET Core API controllers.
