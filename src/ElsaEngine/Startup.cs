@@ -47,7 +47,7 @@ namespace ElsaEngine
                 .UseHttpActivities()
                 .UseRouting()
                 .UseSwagger()
-                .UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "FNB API V1"); })
+                .UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Elsa UI API V1"); })
                 .UseEndpoints(endpoints =>
                 {
                     // Elsa API Endpoints are implemented as regular ASP.NET Core API controllers.
