@@ -3,6 +3,8 @@ using Elsa.Activities.Http.Options;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
 using Elsa.Persistence.EntityFramework.Sqlite;
 using UserTask.AddOns;
+using UserTask.AddOns.Bookmarks;
+using Workflow.Samples;
 
 namespace ElsaEngine
 {
@@ -19,6 +21,7 @@ namespace ElsaEngine
         public void ConfigureServices(IServiceCollection services)
         {
             var elsaServerUrl = configRoot.GetValue<string>("Elsa:Server:BaseUrl");
+            var engineId = configRoot.GetValue<string>("Elsa:Server:EngineId");
             // Elsa services.
             services
                 .AddElsa(elsa => elsa
@@ -30,8 +33,9 @@ namespace ElsaEngine
                         { BasePath = "", BaseUrl = new Uri(elsaServerUrl) };
                     })
                     .AddQuartzTemporalActivities()
-                    .AddUserTaskSignalActivities()
+                    .AddUserTaskSignalActivities(engineId)
                     .AddWorkflowsFrom<Startup>()
+                    .AddWorkflowsFrom<Sample1>()
                 ); ;
 
             // Elsa API endpoints.

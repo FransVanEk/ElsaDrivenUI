@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\UserTaskSignal\UserTask.AddOns.csproj" />
+	  <ProjectReference Include="..\Workflow.Samples\Workflow.Samples.csproj" />
 	</ItemGroup>
 	
 </Project>
