@@ -1,13 +1,13 @@
-using ElsaDrivenWebApp.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using ElsaDrivenWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var baseAddress = builder.Configuration["UsertaskService:BaseAddress"];
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped(sp => new UsertaskService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
+builder.Services.AddScoped(sp => new ProcessService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
+
 
 var app = builder.Build();
 

@@ -3,7 +3,6 @@ using Elsa.Activities.Http.Options;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
 using Elsa.Persistence.EntityFramework.Sqlite;
 using UserTask.AddOns;
-using UserTask.AddOns.Bookmarks;
 using Workflow.Samples;
 
 namespace ElsaEngine

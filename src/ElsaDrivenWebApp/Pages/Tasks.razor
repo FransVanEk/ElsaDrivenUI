@@ -1,0 +1,71 @@
+﻿@page "/tasks/{signal}"
+
+@inject UsertaskService userTaskService
+@inject ProcessService processService
+
+<PageTitle>Usertasks</PageTitle>
+
+<h1>All usertasks</h1>
+
+
+@if (tasks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button @onclick="() => AddSample1Task()">Add Sample1</button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Engine</th>
+                <th>Description</th>
+                <th>Instance Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in tasks)
+            {
+                <tr>
+                    <td>
+                        <button @onclick="() => UpdateTask(task)">@task.TaskTitle</button>
+                    </td>
+                    <td>@task.EngineId</td>
+                    <td>@task.TaskDescription</td>
+                    <td>@task.WorkflowInstanceId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string signal { get; set; } = string.Empty;
+
+    private List<UsertaskViewModel>? tasks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        var tasksArray = await userTaskService.GetWorkflowsForSignal(signal);
+        tasks = tasksArray.ToList();
+    }
+
+    private async Task AddSample1Task()
+    {
+        await processService.SendSignal("sample1");
+        await LoadTasks();
+    }
+
+    private async Task UpdateTask(UsertaskViewModel task)
+    {
+        await userTaskService.MarkAsCompleteAsync(task.WorkflowInstanceId, task.Signal, null);
+        tasks?.Remove(task);
+    }
+}

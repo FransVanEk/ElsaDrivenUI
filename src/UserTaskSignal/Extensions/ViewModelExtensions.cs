@@ -24,9 +24,9 @@ namespace UserTask.AddOns.Extensions
             var data = i.ActivityData[b.ActivityId];
             result.WorkflowInstanceId = i.Id;
             result.Signal = data["Signal"].ToString();
-            result.TaskDescription = data["TaskDescription"].ToString();
-            result.TaskName = data["TaskName"].ToString();
-            result.TaskTitle = data["TaskTitle"].ToString();
+            result.TaskDescription = data["TaskDescription"]?.ToString();
+            result.TaskName = data["TaskName"]?.ToString();
+            result.TaskTitle = data["TaskTitle"]?.ToString();
             result.TaskData = data["TaskData"]?.ToString();
             result.UIDefinition = data["UIDefinition"]?.ToString();
             result.EngineId = serverContext.EngineId;
