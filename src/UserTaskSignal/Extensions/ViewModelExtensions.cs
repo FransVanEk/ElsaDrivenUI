@@ -5,14 +5,14 @@ namespace UserTask.AddOns.Extensions
 {
     public static class ViewModelExtensions
     {
-        internal static List<UsertaskViewModel> ConvertToViewModels(this IEnumerable<WorkflowInstance> source, ServerContext serverContext)
+        internal static List<UsertaskViewModel> ConvertToUsertaskViewModels(this IEnumerable<WorkflowInstance> source, ServerContext serverContext)
         {
             var result = new List<UsertaskViewModel>();
-            source.ToList().ForEach(i => result.AddRange(i.ConvertToViewModels(serverContext)));
+            source.ToList().ForEach(i => result.AddRange(i.ConvertToUsertaskViewModels(serverContext)));
             return result;
         }
 
-        internal static List<UsertaskViewModel> ConvertToViewModels(this WorkflowInstance i, ServerContext serverContext)
+        internal static List<UsertaskViewModel> ConvertToUsertaskViewModels(this WorkflowInstance i, ServerContext serverContext)
         {
             var result = new List<UsertaskViewModel>();
             i.BlockingActivities.ToList().ForEach(b => result.Add(b.ConvertToViewModel(i, serverContext)));
