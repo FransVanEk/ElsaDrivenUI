@@ -13,7 +13,7 @@ namespace UserTask.AddOns
     /// Suspends workflow execution until the specified signal is received.
     /// </summary>
     [Trigger(
-        Category = "Custom",
+        Category = "Usertasks",
         Description = "Suspend workflow execution until the specified signal is received.",
         Outcomes = new[] { OutcomeNames.Done }
     )]

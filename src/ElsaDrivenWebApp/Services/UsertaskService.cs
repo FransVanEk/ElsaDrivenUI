@@ -18,7 +18,7 @@ namespace ElsaDrivenWebApp.Services
 
         public async Task<UsertaskViewModel[]> GetWorkflowsForSignal(string signal)
         {
-            return await httpClient.GetFromJsonAsync<UsertaskViewModel[]>($"/v1/custom-signals/{signal}");
+            return await httpClient.GetFromJsonAsync<UsertaskViewModel[]>($"/v1/usertask-signals/{signal}");
         }
 
         public async Task<UsertaskViewModel[]> GetWorkflowsForSignals(List<string> signals)
@@ -38,7 +38,7 @@ namespace ElsaDrivenWebApp.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-            await httpClient.PostAsync($"/v1/custom-signals/{signal}/dispatch", content);
+            await httpClient.PostAsync($"/v1/usertask-signals/{signal}/dispatch", content);
         }
     }
 }

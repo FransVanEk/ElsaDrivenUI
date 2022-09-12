@@ -14,7 +14,7 @@ using Rebus.Extensions;
 namespace UserTask.AddOns.Endpoints
 {
     [ApiController]
-    [Route("v{apiVersion:apiVersion}/custom-signals")]
+    [Route("v{apiVersion:apiVersion}/usertask-signals")]
     [Produces("application/json")]
     public class UserTaskSignalController : Controller
     {
@@ -39,8 +39,8 @@ namespace UserTask.AddOns.Endpoints
         [SwaggerOperation(
             Summary = "Signals all workflows waiting on the specified signal name synchronously.",
             Description = "Signals all workflows waiting on the specified signal name synchronously.",
-            OperationId = "CustomSignals.Execute",
-            Tags = new[] { "CustomSignals" })
+            OperationId = "UsertaskSignals.Execute",
+            Tags = new[] { "UsertaskSignals" })
         ]
         public async Task<IActionResult> Handle(string signalName, ExecuteSignalRequest request,
             CancellationToken cancellationToken = default)
@@ -56,8 +56,8 @@ namespace UserTask.AddOns.Endpoints
         [SwaggerOperation(
            Summary = "Signals all workflows waiting on the specified signal name asynchronously.",
            Description = "Signals all workflows waiting on the specified signal name asynchronously.",
-           OperationId = "CustomSignals.Dispatch",
-           Tags = new[] { "CustomSignals" })
+           OperationId = "UsertaskSignals.Dispatch",
+           Tags = new[] { "UsertaskSignals" })
        ]
         public async Task<IActionResult> HandleDispatch(string signalName, ExecuteSignalRequest request,
            CancellationToken cancellationToken = default)
@@ -73,8 +73,9 @@ namespace UserTask.AddOns.Endpoints
         [SwaggerOperation(
            Summary = "Gets all workflows waiting any usertaks signal",
            Description = "return a list of workflow instances",
-           OperationId = "CustomSignals.Query",
-           Tags = new[] { "CustomSignals" })
+           OperationId = "Usertask" +
+            "Signals.Query",
+           Tags = new[] { "UsertaskSignals" })
        ]
         public async Task<IActionResult> CollectWaitingWorkflowInstances(CancellationToken cancellationToken = default)
         {
