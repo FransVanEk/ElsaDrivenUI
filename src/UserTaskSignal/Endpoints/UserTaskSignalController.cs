@@ -82,7 +82,7 @@ namespace UserTask.AddOns.Endpoints
             var bookmarkResults = await bookmarkFinder.FindBookmarksByTypeAsync(typeof(UserTaskSignalBookmark).GetSimpleAssemblyQualifiedName());
             var workflowInstanceIds = new WorkflowInstanceIdsSpecification(bookmarkResults.Select(x => x.WorkflowInstanceId).ToList());
             var workflowInstances = await workflowInstanceStore.FindManyAsync(workflowInstanceIds, null, null, cancellationToken);
-            var viewmodelResult = workflowInstances.ConvertToViewModels(serverContext);
+            var viewmodelResult = workflowInstances.ConvertToUsertaskViewModels(serverContext);
             return Ok(viewmodelResult.ToList());
         }
 
@@ -105,7 +105,7 @@ namespace UserTask.AddOns.Endpoints
             var workflowInstanceIds = new WorkflowInstanceIdsSpecification(bookmarkResults.Select(x => x.WorkflowInstanceId).ToList());
             var workflowInstances = await workflowInstanceStore.FindManyAsync(workflowInstanceIds, null, null, cancellationToken);
 
-            var viewmodelResult = workflowInstances.ConvertToViewModels(serverContext);
+            var viewmodelResult = workflowInstances.ConvertToUsertaskViewModels(serverContext);
             normalizedSignal = null;
             return Ok(viewmodelResult.ToList());
         }

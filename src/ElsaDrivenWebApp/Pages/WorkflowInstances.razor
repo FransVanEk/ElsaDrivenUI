@@ -1,0 +1,56 @@
+﻿<h3>WorkflowInstances</h3>
+
+@inject UsertaskService userTaskService
+@inject ProcessService processService
+
+@if (tasks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Engine</th>
+                <th>Description</th>
+                <th>Instance Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in tasks.OrderBy(t => t.WorkflowInstanceId))
+            {
+                <tr>
+                    <td>
+                        <button @onclick="() => Open(task)">@task.TaskTitle</button>
+                    </td>
+                    <td>@task.EngineId</td>
+                    <td>@task.TaskDescription</td>
+                    <td>@task.WorkflowInstanceId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+
+    private List<UsertaskViewModel>? tasks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        var tasksArray = await userTaskService.GetWorkflowsWaitingOnUserTask();
+        tasks = tasksArray.ToList();
+    }
+
+    private async Task Open(UsertaskViewModel task)
+    {
+        await userTaskService.MarkAsCompleteAsync(task.WorkflowInstanceId, task.Signal, null);
+        tasks?.Remove(task);
+    }
+}
