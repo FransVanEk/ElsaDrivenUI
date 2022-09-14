@@ -33,6 +33,15 @@ namespace Workflow.Samples
                     a.Set(x => x.TaskName, "The task will suspend the execution until the button is pressed");
                 }
                 )
+                .Then<UserTaskSignal>(a =>
+                {
+                    a.Set(x => x.Signal, "usertasksample3a");
+                    a.Set(x => x.TaskName, "Demo Sample3");
+                    a.Set(x => x.TaskTitle, "Dynamic forms");
+                    a.Set(x => x.UIDefinition, "{\"groups\":[{\"name\":\"demo\",\"layoutHint\":\"\",\"subGroups\":[{\"layoutHint\":\"\",\"index\":1,\"items\":[{\"index\":1,\"span\":4,\"path\":\"$.number\",\"typeName\":\"NumberInput\",\"layoutHint\":\"\",\"text\":\"number\",\"groups\":[],\"customData\":{}},{\"index\":2,\"span\":8,\"path\":\"$.myText\",\"typeName\":\"TextInput\",\"layoutHint\":\"\",\"text\":\"initial text\",\"groups\":[],\"customData\":{}}]},{\"layoutHint\":\"\",\"index\":2,\"items\":[{\"index\":1,\"span\":4,\"path\":\"$.datefield\",\"typeName\":\"DateInput\",\"layoutHint\":\"\",\"text\":\"date\",\"groups\":[],\"customData\":{}},{\"index\":2,\"span\":8,\"path\":\"$.otherText\",\"typeName\":\"TextInput\",\"layoutHint\":\"\",\"text\":\"next text\",\"groups\":[],\"customData\":{}}]}]}],\"title\":\"random text\"}");
+                    a.Set(x => x.TaskName, "The task will suspend the execution until the button is pressed");
+                }
+                )
                 .WriteLine($"Workflow is done");
         }
     }
