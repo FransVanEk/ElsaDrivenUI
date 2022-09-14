@@ -77,14 +77,14 @@ else
 
     private async Task TaskFinished2()
     {
-        await Task.Delay(500);
+       
         selectedUsertasksample2 = null;
         await LoadTasks();
     }
 
     private async Task TaskFinished2a()
     {
-        await Task.Delay(500);
+      
         selectedUsertasksample2a = null;
         await LoadTasks();
     }
@@ -117,7 +117,6 @@ else
     {
         var settings = new Envelope<Sample2Settings>(new Sample2Settings { Name = inputValue });
         await processService.SendSignal("sample2", settings);
-        await Task.Delay(500);
         await LoadTasks();
     }
 }
