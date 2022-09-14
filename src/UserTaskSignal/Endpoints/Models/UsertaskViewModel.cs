@@ -5,27 +5,27 @@ namespace UserTask.AddOns.Endpoints.Models
     internal class UsertaskViewModel
     {
         [JsonProperty("taskDescription")]
-        public string TaskDescription { get; internal set; }
+        internal string TaskDescription { get;  set; }
 
         [JsonProperty("taskName")]
-        public string TaskName { get; internal set; }
+        internal string TaskName { get;  set; }
 
         [JsonProperty("taskTitle")]
-        public string TaskTitle { get; internal set; }
+        internal string TaskTitle { get;  set; }
 
         [JsonProperty("workflowInstanceId")]
-        public string WorkflowInstanceId { get; internal set; }
+        internal string WorkflowInstanceId { get;  set; }
 
         [JsonProperty("uiDefinition")]
-        public string UIDefinition { get; internal set; }
+        internal string UIDefinition { get;  set; }
 
         [JsonProperty("signal")]
-        public string Signal { get; internal set; }
+        internal string Signal { get;  set; }
 
         [JsonProperty("engineId")]
-        public string EngineId { get; internal set; }
+        internal string EngineId { get;  set; }
 
         [JsonProperty("taskData")]
-        public string TaskData { get; internal set; }
+        internal string TaskData { get;  set; }
     }
 }

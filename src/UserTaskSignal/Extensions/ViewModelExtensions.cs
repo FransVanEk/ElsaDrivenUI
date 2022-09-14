@@ -5,6 +5,22 @@ namespace UserTask.AddOns.Extensions
 {
     public static class ViewModelExtensions
     {
+        internal static List<WorkfowInstanceUsertaskViewModel> ConvertToWorkflowInstanceUsertaskViewModels(this IEnumerable<WorkflowInstance> source, ServerContext serverContext, IEnumerable<Bookmark> bookmarks)
+        {
+            var result = new List<WorkfowInstanceUsertaskViewModel>();
+            source.ToList().ForEach(x =>
+            result.Add(new WorkfowInstanceUsertaskViewModel
+            {
+                WorkflowName = x.Name ?? "not set",
+                LastExecuted = x.LastExecutedActivityId,
+                State = x.WorkflowStatus.ToString(),
+                DefinitionId = x.DefinitionId,
+                UserTasks = x.ConvertToUsertaskViewModels(serverContext)
+            })
+            );
+            return result;
+        }
+
         internal static List<UsertaskViewModel> ConvertToUsertaskViewModels(this IEnumerable<WorkflowInstance> source, ServerContext serverContext)
         {
             var result = new List<UsertaskViewModel>();

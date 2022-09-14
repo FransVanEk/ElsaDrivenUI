@@ -1,5 +1,4 @@
-﻿using ElsaDrivenWebApp.Services.Models;
-
+﻿
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
@@ -13,6 +12,11 @@ namespace ElsaDrivenWebApp.Services
         public ProcessService(HttpClient httpClient)
         {
             this.httpClient = httpClient;
+        }
+
+        public async Task SendSignal(string signal, object data)
+        {
+            await PostObjectJson(data, $"v1/signals/{signal}/dispatch");
         }
 
         public async Task SendSignal(string signal)

@@ -1,41 +1,68 @@
-﻿<h3>WorkflowInstances</h3>
+﻿@page "/WorkflowInstances"
+@using ElsaDrivenWebApp.Shared.Components
+
+<h3>WorkflowInstances</h3>
 
 @inject UsertaskService userTaskService
 @inject ProcessService processService
 
-@if (tasks == null)
+@if (workflowInstances == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
     <table class="table">
+        <tr>
+            <td><input @bind="inputValue" /></td>
+            <td><button @onclick="() => AddSample2Task()">Start Sample 2 workflow</button></td>
+        </tr>
+    </table>
+
+    <table class="table">
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Engine</th>
+                <th>Instance name</th>
+                <th>State</th>
                 <th>Description</th>
-                <th>Instance Id</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var task in tasks.OrderBy(t => t.WorkflowInstanceId))
+            @foreach (var workflowInstance in workflowInstances)
             {
                 <tr>
                     <td>
-                        <button @onclick="() => Open(task)">@task.TaskTitle</button>
+                        @workflowInstance.DefinitionId
                     </td>
-                    <td>@task.EngineId</td>
-                    <td>@task.TaskDescription</td>
-                    <td>@task.WorkflowInstanceId</td>
+                    <td>
+                        @workflowInstance.WorkflowName
+                    </td>
+                    <td>
+                        @workflowInstance.State
+                    </td>
+                    <td>
+                        @foreach (var usertask in workflowInstance.UserTasks)
+                        {
+                            <button @onclick="() => Open(usertask)">@usertask.TaskTitle - @usertask.TaskDescription</button>
+
+                            <br />
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+    <Usertasksample2 Task=selectedUsertasksample2 OnFinished="TaskFinished2"></Usertasksample2>
+     <Usertasksample2a Task=selectedUsertasksample2a OnFinished="TaskFinished2a"></Usertasksample2a>
+
 }
 @code {
 
-    private List<UsertaskViewModel>? tasks;
+    private List<WorkfowInstanceUsertaskViewModel>? workflowInstances;
+    private string? inputValue;
+    private UsertaskViewModel? selectedUsertasksample2 { get; set; } = null;
+    private UsertaskViewModel? selectedUsertasksample2a { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,13 +71,53 @@ else
 
     private async Task LoadTasks()
     {
-        var tasksArray = await userTaskService.GetWorkflowsWaitingOnUserTask();
-        tasks = tasksArray.ToList();
+        var workflowInstancesArray = await userTaskService.GetWorkflowsWaitingOnUserTask();
+        workflowInstances = workflowInstancesArray.ToList();
+    }
+
+    private async Task TaskFinished2()
+    {
+        await Task.Delay(500);
+        selectedUsertasksample2 = null;
+        await LoadTasks();
+    }
+
+    private async Task TaskFinished2a()
+    {
+        await Task.Delay(500);
+        selectedUsertasksample2a = null;
+        await LoadTasks();
     }
 
     private async Task Open(UsertaskViewModel task)
     {
+        selectedUsertasksample2 = null;
+
+        switch (task.Signal)
+        {
+            case "usertasksample2":
+                selectedUsertasksample2 = task;
+                break;
+            case "usertasksample2a":
+                selectedUsertasksample2a = task;
+                break;
+            default:
+                await SendSignal(task);
+                break;
+        }
+    }
+
+    private async Task SendSignal(UsertaskViewModel task)
+    {
         await userTaskService.MarkAsCompleteAsync(task.WorkflowInstanceId, task.Signal, null);
-        tasks?.Remove(task);
+        await LoadTasks();
+    }
+
+    private async Task AddSample2Task()
+    {
+        var settings = new Envelope<Sample2Settings>(new Sample2Settings { Name = inputValue });
+        await processService.SendSignal("sample2", settings);
+        await Task.Delay(500);
+        await LoadTasks();
     }
 }

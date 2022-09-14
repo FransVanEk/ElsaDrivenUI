@@ -21,9 +21,9 @@ namespace ElsaDrivenWebApp.Services
             return await httpClient.GetFromJsonAsync<UsertaskViewModel[]>($"/v1/usertask-signals/{signal}");
         }
 
-        public async Task<UsertaskViewModel[]> GetWorkflowsWaitingOnUserTask()
+        public async Task<WorkfowInstanceUsertaskViewModel[]> GetWorkflowsWaitingOnUserTask()
         {
-            return await httpClient.GetFromJsonAsync<UsertaskViewModel[]>($"/v1/usertask-signals/workflowinstances");
+            return await httpClient.GetFromJsonAsync<WorkfowInstanceUsertaskViewModel[]>($"/v1/usertask-signals");
         }
 
         public async Task<UsertaskViewModel[]> GetWorkflowsForSignals(List<string> signals)

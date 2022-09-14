@@ -67,7 +67,7 @@ namespace UserTask.AddOns.Endpoints
             return Ok(collectedWorkflows.ToList());
         }
 
-        [HttpGet("workflowInstances")]
+        [HttpGet]
         // [ElsaJsonFormatter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExecuteSignalResponse))]
         [SwaggerOperation(
@@ -82,7 +82,7 @@ namespace UserTask.AddOns.Endpoints
             var bookmarkResults = await bookmarkFinder.FindBookmarksByTypeAsync(typeof(UserTaskSignalBookmark).GetSimpleAssemblyQualifiedName());
             var workflowInstanceIds = new WorkflowInstanceIdsSpecification(bookmarkResults.Select(x => x.WorkflowInstanceId).ToList());
             var workflowInstances = await workflowInstanceStore.FindManyAsync(workflowInstanceIds, null, null, cancellationToken);
-            var viewmodelResult = workflowInstances.ConvertToUsertaskViewModels(serverContext);
+            var viewmodelResult = workflowInstances.ConvertToWorkflowInstanceUsertaskViewModels(serverContext, bookmarkResults);
             return Ok(viewmodelResult.ToList());
         }
 
@@ -93,7 +93,7 @@ namespace UserTask.AddOns.Endpoints
           Summary = "Gets all workflows waiting for a specific signal to be returned",
           Description = "return a list of workflow instances",
           OperationId = "CustomSignals.Query",
-          Tags = new[] { "CustomSignals" })
+          Tags = new[] { "UsertaskSignals" })
       ]
         public async Task<IActionResult> Collect(string signalName,
           CancellationToken cancellationToken = default)
