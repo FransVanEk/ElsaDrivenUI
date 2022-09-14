@@ -73,14 +73,22 @@ namespace UserTask.AddOns.Endpoints
         [SwaggerOperation(
            Summary = "Gets all workflows waiting any usertaks signal",
            Description = "return a list of workflow instances",
-           OperationId = "Usertask" +
-            "Signals.Query",
+           OperationId = "UsertaskSignals.Query",
            Tags = new[] { "UsertaskSignals" })
        ]
-        public async Task<IActionResult> CollectWaitingWorkflowInstances(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CollectWaitingWorkflowInstances([FromQuery] string? workflowinstanceId, CancellationToken cancellationToken = default)
         {
             var bookmarkResults = await bookmarkFinder.FindBookmarksByTypeAsync(typeof(UserTaskSignalBookmark).GetSimpleAssemblyQualifiedName());
             var workflowInstanceIds = new WorkflowInstanceIdsSpecification(bookmarkResults.Select(x => x.WorkflowInstanceId).ToList());
+            if (workflowinstanceId != null)
+            {
+                if (bookmarkResults.All(b => b.WorkflowInstanceId != workflowinstanceId))
+                { return Ok(new List<WorkfowInstanceUsertaskViewModel>()); }
+                else
+                {
+                    workflowInstanceIds = new WorkflowInstanceIdsSpecification(new List<string> { workflowinstanceId });
+                }
+            }
             var workflowInstances = await workflowInstanceStore.FindManyAsync(workflowInstanceIds, null, null, cancellationToken);
             var viewmodelResult = workflowInstances.ConvertToWorkflowInstanceUsertaskViewModels(serverContext, bookmarkResults);
             return Ok(viewmodelResult.ToList());
