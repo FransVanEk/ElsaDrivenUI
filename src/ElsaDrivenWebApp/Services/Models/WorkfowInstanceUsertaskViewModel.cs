@@ -4,6 +4,9 @@ namespace ElsaDrivenWebApp.Services.Models
 {
     public class WorkfowInstanceUsertaskViewModel
     {
+        [JsonProperty("workflowInstanceId")]
+        public string WorkflowInstanceId { get; set; } = string.Empty;
+
         [JsonProperty("lastExecuted")]
         public string? LastExecuted { get; set; }
 
