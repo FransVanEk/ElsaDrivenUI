@@ -20,9 +20,9 @@ namespace Workflow.Samples
                  .Then<SetVariable>(a =>
                     {
                         a.Set(x => x.VariableName, "Name");
-                        a.Set(x => x.Value, context =>  context.GetInput<Sample2Settings>());
+                        a.Set(x => x.Value, context =>  context.GetInput<SampleSettings>());
                     })
-                .SetName(context => ((Sample2Settings)context.GetVariable("Name")).Name)
+                .SetName(context => ((SampleSettings)context.GetVariable("Name")).Name)
                 .WriteLine($"Starting workflow")
                 .Then<UserTaskSignal>(a =>
                 {
