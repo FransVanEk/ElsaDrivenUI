@@ -17,7 +17,7 @@ namespace ElsaDrivenWebApp.Services
 
         public async Task SendSignal(string signal)
         {
-            await PostObjectJson(new JObject(), $"v1/signals/{signal}/dispatch");
+            await PostObjectJson(new JObject(), $"v1/signals/{signal}/execute");
         }
 
         private async Task PostObjectJson(object data, string url)
