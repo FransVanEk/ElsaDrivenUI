@@ -33,7 +33,7 @@ else
             {
                 <tr>
                     <td>
-                        @workflowInstance.DefinitionId
+                       <a href="workflowinstance/@workflowInstance.">@workflowInstance.DefinitionId</a>
                     </td>
                     <td>
                         @workflowInstance.WorkflowName
@@ -45,7 +45,6 @@ else
                         @foreach (var usertask in workflowInstance.UserTasks)
                         {
                             <button @onclick="() => Open(usertask)">@usertask.TaskTitle - @usertask.TaskDescription</button>
-
                             <br />
                         }
                     </td>

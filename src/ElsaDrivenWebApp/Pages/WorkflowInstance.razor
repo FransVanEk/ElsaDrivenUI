@@ -1,0 +1,14 @@
+﻿@page "/WorkflowInstances/{workflowinstanceid}"
+@using ElsaDrivenWebApp.Shared.Components
+
+@if(!string.IsNullOrEmpty(workflowinstanceid))
+{
+    @workflowinstanceid
+}
+
+@code {
+
+    [Parameter]
+    public string workflowinstanceid { get; set; } = string.Empty;
+
+}
