@@ -11,6 +11,7 @@ namespace UserTask.AddOns.Extensions
             source.ToList().ForEach(x =>
             result.Add(new WorkfowInstanceUsertaskViewModel
             {
+                WorkflowInstanceId = x.Id,
                 WorkflowName = x.Name ?? "not set",
                 LastExecuted = x.LastExecutedActivityId,
                 State = x.WorkflowStatus.ToString(),

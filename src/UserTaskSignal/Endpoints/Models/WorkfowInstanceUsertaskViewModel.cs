@@ -5,6 +5,9 @@ namespace UserTask.AddOns.Endpoints.Models
 {
     internal class WorkfowInstanceUsertaskViewModel
     {
+        [JsonProperty("workflowInstanceId")]
+        public string WorkflowInstanceId { get; set; } = string.Empty;
+
         [JsonProperty("lastExecuted")]
         internal string? LastExecuted { get;  set; }
         [JsonProperty("state")] 
