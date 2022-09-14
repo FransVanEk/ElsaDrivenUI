@@ -16,7 +16,11 @@ builder.Services.AddScoped(sp => new ProcessService(new HttpClient { BaseAddress
 //dynamic form
 builder.Services.AddScoped(sp =>
     new DynamicElementsRepository()
-        .GetHTMLDefaultSettings());
+        .GetHTMLDefaultSettings()
+        .Add("TextInput", typeof(TextInput))
+        .Add("NumberInput", typeof(NumberInput))
+        .Add("BoolInput", typeof(BoolInput))
+        .Add("DateInput", typeof(DateInput)));
 
 var app = builder.Build();
 

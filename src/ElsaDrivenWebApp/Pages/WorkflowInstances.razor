@@ -122,8 +122,8 @@ else
 
       private async Task AddSample3Task()
     {
-        var settings = new Envelope<SampleSettings>(new Sample2Settings { Name = inputValue });
-        await processService.SendSignal("sample2", settings);
+        var settings = new Envelope<SampleSettings>(new SampleSettings { Name = inputValue });
+        await processService.SendSignal("sample3", settings);
         await LoadTasks();
     }
 }
