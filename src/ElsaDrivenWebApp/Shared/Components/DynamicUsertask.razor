@@ -1,0 +1,37 @@
+﻿@inject UsertaskService userTaskService
+
+<DynamicForm @ref="df" Layout="@(GetLayout())" @bind-Value=taskData></DynamicForm>
+
+<div class="row">
+    <div class="col-md-12 text-right">
+         <button @onclick="() => SendSignalAndData()">Continue</button>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public UsertaskViewModel Usertask { get; set; }
+    
+    [Parameter]
+    public EventCallback OnFinished { get; set; }
+    
+    private JToken taskData { get; set; } = new JObject();
+    private DynamicForm df { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    private DynamicLayout? GetLayout()
+    {
+        return JsonConvert.DeserializeObject<DynamicLayout>(Usertask.UIDefinition);
+    }
+
+     private async Task SendSignalAndData()
+    {
+        await userTaskService.MarkAsCompleteAsync(Usertask.WorkflowInstanceId, Usertask.Signal, taskData);
+        await OnFinished.InvokeAsync();
+        Usertask = null;
+    }
+}

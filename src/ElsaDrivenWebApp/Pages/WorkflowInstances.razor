@@ -16,6 +16,7 @@ else
         <tr>
             <td><input @bind="inputValue" /></td>
             <td><button @onclick="() => AddSample2Task()">Start Sample 2 workflow</button></td>
+            <td><button @onclick="() => AddSample3Task()">Start Sample 3 workflow</button></td>
         </tr>
     </table>
 
@@ -113,6 +114,13 @@ else
     }
 
     private async Task AddSample2Task()
+    {
+        var settings = new Envelope<Sample2Settings>(new Sample2Settings { Name = inputValue });
+        await processService.SendSignal("sample2", settings);
+        await LoadTasks();
+    }
+
+      private async Task AddSample2Task()
     {
         var settings = new Envelope<Sample2Settings>(new Sample2Settings { Name = inputValue });
         await processService.SendSignal("sample2", settings);
