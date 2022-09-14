@@ -60,7 +60,6 @@ else
     private async Task AddSample1Task()
     {
         await processService.SendSignal("sample1");
-        Task.Delay(1500);
         await LoadTasks();
     }
 

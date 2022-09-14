@@ -43,7 +43,7 @@ namespace ElsaDrivenWebApp.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-            await httpClient.PostAsync($"/v1/usertask-signals/{signal}/dispatch", content);
+            await httpClient.PostAsync($"/v1/usertask-signals/{signal}/execute", content);
         }
     }
 }
