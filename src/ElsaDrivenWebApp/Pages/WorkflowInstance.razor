@@ -43,6 +43,7 @@
     {
         var workflowInstance = await userTaskService.GetUsertasksFor(workflowinstanceid);
         usertask = workflowInstance?.UserTasks?.FirstOrDefault();
+        
     }
 
     private async Task SendSignal(UsertaskViewModel task)

@@ -22,7 +22,7 @@
     private JToken taskData { get; set; } = new JObject();
     private DynamicForm df { get; set; }
 
-   
+
     private DynamicLayout? GetLayout()
     {
         return JsonConvert.DeserializeObject<DynamicLayout>(Usertask.UIDefinition);
@@ -33,6 +33,7 @@
         await userTaskService.MarkAsCompleteAsync(Usertask.WorkflowInstanceId, Usertask.Signal, taskData);
         Usertask = null;
         taskData = new JObject();
+        df.ResetData();
         await OnFinished.InvokeAsync();
     }
 }
