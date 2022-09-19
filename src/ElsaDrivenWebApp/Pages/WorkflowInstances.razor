@@ -5,6 +5,7 @@
 
 @inject UsertaskService userTaskService
 @inject ProcessService processService
+@inject NavigationManager NavManager
 
 @if (workflowInstances == null)
 {
@@ -123,7 +124,7 @@ else
       private async Task AddSample3Task()
     {
         var settings = new Envelope<SampleSettings>(new SampleSettings { Name = inputValue });
-        await processService.SendSignal("sample3", settings);
-        await LoadTasks();
+        var items = await processService.SendSignal("sample3", settings);
+        NavManager.NavigateTo($"workflowinstances/{items.StartedWorkflows.First().WorkflowInstanceId}");
     }
 }
