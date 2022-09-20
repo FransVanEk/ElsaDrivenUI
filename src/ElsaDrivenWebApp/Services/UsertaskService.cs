@@ -36,11 +36,10 @@ namespace ElsaDrivenWebApp.Services
         public async Task<WorkfowInstanceUsertaskViewModel> GetUsertasksFor(string workflowinstanceId)
         {
             var items = await httpClient.GetFromJsonAsync<WorkfowInstanceUsertaskViewModel[]>($"/v1/usertask-signals?workflowinstanceId={workflowinstanceId}");
-
             return items?.FirstOrDefault();
         }
 
-        public async Task MarkAsCompleteAsync(string workflowInstanceId, string signal, JToken signalData)
+        public async Task MarkAsComplete(string workflowInstanceId, string signal, JToken signalData)
         {
             var data = new MarkAsCompletedPostModel
             {
@@ -50,6 +49,18 @@ namespace ElsaDrivenWebApp.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             await httpClient.PostAsync($"/v1/usertask-signals/{signal}/execute", content);
+        }
+
+        public async Task MarkAsCompleteDispatched(string workflowInstanceId, string signal, JToken signalData)
+        {
+            var data = new MarkAsCompletedPostModel
+            {
+                WorkflowInstanceId = workflowInstanceId,
+                Input = signalData == null ? JValue.CreateNull() : signalData
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            await httpClient.PostAsync($"/v1/usertask-signals/{signal}/dispatch", content);
         }
     }
 }

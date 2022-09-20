@@ -10,6 +10,8 @@ using Elsa.Server.Api.Endpoints.Signals;
 using UserTask.AddOns.Endpoints.Models;
 using UserTask.AddOns.Extensions;
 using Rebus.Extensions;
+using AutoMapper.Internal.Mappers;
+using Elsa.Models;
 
 namespace UserTask.AddOns.Endpoints
 {
@@ -83,7 +85,10 @@ namespace UserTask.AddOns.Endpoints
             if (workflowinstanceId != null)
             {
                 if (bookmarkResults.All(b => b.WorkflowInstanceId != workflowinstanceId))
-                { return Ok(new List<WorkfowInstanceUsertaskViewModel>()); }
+                {
+                    var workflow = await workflowInstanceStore.FindManyAsync(new WorkflowInstanceIdsSpecification(new List<string> { workflowinstanceId }), null, null, cancellationToken);
+                    return Ok(workflow.ConvertToWorkflowInstanceUsertaskViewModels(serverContext, new List<Bookmark>()));
+                 }
                 else
                 {
                     workflowInstanceIds = new WorkflowInstanceIdsSpecification(new List<string> { workflowinstanceId });

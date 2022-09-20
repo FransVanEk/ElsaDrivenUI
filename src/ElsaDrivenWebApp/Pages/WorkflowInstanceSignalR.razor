@@ -1,0 +1,95 @@
+﻿@page "/WorkflowInstancesSignalR/{workflowinstanceid}"
+
+@using ElsaDrivenWebApp.Shared.Components
+@using Microsoft.AspNetCore.SignalR.Client
+@using System.Diagnostics
+
+@inject UsertaskService userTaskService
+@inject ProcessService processService
+@inject HubConnection HubConnection
+
+<h2>Long running activity</h2>
+
+@if (NeedRefresh())
+{
+    <DynamicUsertask UseDispatch=true OnFinished="TaskFinished" Usertask=usertask></DynamicUsertask>
+}
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Status</h5>
+            @if (WorkFlowHasFinished)
+            {
+                <b>Finished</b>
+            }
+            else
+            {
+                <b>Processing</b>
+            }
+        </div>
+    </div>
+}
+
+@code {
+
+    private bool NeedRefresh()
+    {
+        Debug.WriteLine($"NeedRefresh : usertask:{usertask?.WorkflowInstanceId}");
+        return usertask != null;
+    }
+
+    [Parameter]
+    public string workflowinstanceid { get; set; } = string.Empty;
+
+    private UsertaskViewModel? usertask;
+    private bool WorkFlowHasFinished = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await HubConnection.InvokeAsync("LeaveWorkflowInstanceGroup", workflowinstanceid);
+        //setup notifications listener
+        HubConnection.On<UserTaskInfo>("UserTaskInitiated", async usertask =>
+        {
+            await LoadTask();
+            Debug.WriteLine($"OnInitializedAsync : usertask:{usertask?.WorkflowInstanceId}");
+            await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+        });
+        await HubConnection.InvokeAsync("JoinWorkflowInstanceGroup", workflowinstanceid);
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await LoadTask();
+        Debug.WriteLine($"OnParametersSetAsync : usertask:{usertask?.WorkflowInstanceId}");
+
+    }
+
+    private async Task LoadTask()
+    {
+        var workflowInstance = await userTaskService.GetUsertasksFor(workflowinstanceid);
+        usertask = workflowInstance?.UserTasks?.FirstOrDefault();
+        if(usertask==null && workflowInstance != null) { WorkFlowHasFinished = workflowInstance.State == "Finished"; }
+        Debug.WriteLine($"loadtask : usertask:{usertask?.WorkflowInstanceId}");
+    }
+
+
+    private async Task TaskFinished()
+    {
+        usertask = null;
+    }
+
+    public async void Dispose()
+    {
+        await HubConnection.InvokeAsync("LeaveWorkflowInstanceGroup", workflowinstanceid);
+    }
+
+    private class UserTaskInfo
+    {
+        public string WorkflowInstanceId { get; set; }
+        public string? ActivityName { get; set; }
+    }
+}

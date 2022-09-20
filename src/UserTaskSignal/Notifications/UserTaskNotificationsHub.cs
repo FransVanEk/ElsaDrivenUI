@@ -9,6 +9,8 @@ namespace UserTask.AddOns.Notifications
 
     public class UserTaskInfo
     {
+        public string WorkflowInstanceId { get; internal set; }
+        public string? ActivityName { get; internal set; }
     }
 
     public class UserTaskInfoHub : Hub<IUserTaskInfoHub>

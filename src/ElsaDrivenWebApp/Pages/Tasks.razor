@@ -65,7 +65,7 @@ else
 
     private async Task UpdateTask(UsertaskViewModel task)
     {
-        await userTaskService.MarkAsCompleteAsync(task.WorkflowInstanceId, task.Signal, null);
+        await userTaskService.MarkAsComplete(task.WorkflowInstanceId, task.Signal, null);
         tasks?.Remove(task);
     }
 }

@@ -1,7 +1,7 @@
 ﻿@inject UsertaskService userTaskService
 @if(Usertask !=null)
 {
-<DynamicForm @ref="df" Layout="@(GetLayout())"  @bind-Value=taskData></DynamicForm>
+<DynamicForm  @ref="df" Layout="@(GetLayout())"  @bind-Value=taskData></DynamicForm>
 
 <div class="row">
     <div class="col-md-12 text-right">
@@ -15,6 +15,8 @@
     [Parameter]
     public UsertaskViewModel? Usertask { get; set; }
 
+    [Parameter]
+    public bool UseDispatch { get; set; } = false;
 
     [Parameter]
     public EventCallback OnFinished { get; set; }
@@ -30,7 +32,12 @@
 
     private async Task SendSignalAndData()
     {
-        await userTaskService.MarkAsCompleteAsync(Usertask.WorkflowInstanceId, Usertask.Signal, taskData);
+        if(UseDispatch){
+            await userTaskService.MarkAsCompleteDispatched(Usertask.WorkflowInstanceId, Usertask.Signal, taskData);
+        }
+        else {
+            await userTaskService.MarkAsComplete(Usertask.WorkflowInstanceId, Usertask.Signal, taskData);
+        }
         Usertask = null;
         taskData = new JObject();
         df.ResetData();

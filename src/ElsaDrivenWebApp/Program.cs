@@ -17,7 +17,7 @@ builder.Services.AddScoped(sp => new ProcessService(new HttpClient { BaseAddress
 //signalR for notifications 
 builder.Services.AddSingleton<HubConnection>(sp => {
     return new HubConnectionBuilder()
-        .WithUrl("http://localhost:7210/usertask-info")
+        .WithUrl("https://localhost:7210/usertask-info")
         .WithAutomaticReconnect()
         .Build();
 });
