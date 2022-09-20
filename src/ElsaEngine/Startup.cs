@@ -1,8 +1,10 @@
 ﻿using Elsa;
 using Elsa.Activities.Http.Options;
+using Elsa.Events;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
 using Elsa.Persistence.EntityFramework.Sqlite;
 using UserTask.AddOns;
+using UserTask.AddOns.Notifications;
 using Workflow.Samples;
 
 namespace ElsaEngine
@@ -35,13 +37,19 @@ namespace ElsaEngine
                     .AddUserTaskSignalActivities(engineId)
                     .AddWorkflowsFrom<Startup>()
                     .AddWorkflowsFrom<Sample1>()
-                ); ;
+                );
+
+            // Notifications
+            services.AddSignalR();
+            services.AddNotificationHandler<ActivityExecuted, OnExecuteUserTask>();
 
             // Elsa API endpoints.
             services.AddElsaApiEndpoints()
-                .AddElsaSwagger(); 
+                    .AddElsaSwagger(); 
+            
             // For Dashboard.
             services.AddRazorPages();
+            services.AddServerSideBlazor(); // needed for notifications
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {
@@ -51,6 +59,7 @@ namespace ElsaEngine
                 .UseRouting()
                 .UseSwagger()
                 .UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Elsa UI API V1"); })
+                .UseCors() // needed for signalr to work
                 .UseEndpoints(endpoints =>
                 {
                     // Elsa API Endpoints are implemented as regular ASP.NET Core API controllers.
@@ -58,6 +67,10 @@ namespace ElsaEngine
 
                     // For Dashboard.
                     endpoints.MapFallbackToPage("/_Host");
+                    
+                    // Notifications
+                    endpoints.MapBlazorHub();
+                    endpoints.MapHub<UserTaskInfoHub>("/usertask-info");
                 });
             app.Run();
         }

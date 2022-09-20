@@ -4,6 +4,7 @@ using DynamicBlazorForm.Themes.HTML;
 using Newtonsoft.Json;
 using DynamicBlazorForm.Core.Layout;
 using DynamicBlazorForm.Core.Layout.FluentApi;
+using Microsoft.AspNetCore.SignalR.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 var baseAddress = builder.Configuration["UsertaskService:BaseAddress"];
@@ -12,6 +13,14 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped(sp => new UsertaskService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
 builder.Services.AddScoped(sp => new ProcessService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
+
+//signalR for notifications 
+builder.Services.AddSingleton<HubConnection>(sp => {
+    return new HubConnectionBuilder()
+        .WithUrl("http://localhost:7210/usertask-info")
+        .WithAutomaticReconnect()
+        .Build();
+});
 
 //dynamic form
 builder.Services.AddScoped(sp =>
