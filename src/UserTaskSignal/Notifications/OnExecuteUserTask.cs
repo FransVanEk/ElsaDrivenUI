@@ -34,5 +34,5 @@ namespace UserTask.AddOns.Notifications
             var usertaskType = typeof(UserTaskSignal);
             return activityType == usertaskType || activityType.GetType().IsSubclassOf(typeof(UserTaskSignal));
         }
-    }adob
+    }
 }
