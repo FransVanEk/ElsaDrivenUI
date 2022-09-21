@@ -40,6 +40,7 @@
         {
             try
             {
+                if (HubConnection.State == HubConnectionState.Connected) { return true; }
                 await HubConnection.StartAsync(token);
                 return true;
             }

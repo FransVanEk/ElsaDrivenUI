@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace UserTask.AddOns.Notifications
 {
-    public class OnExecuteUserTask : INotificationHandler<ActivityExecuted>
+    public class OnExecuteUserTask : INotificationHandler<ActivityExecuted>, INotificationHandler<WorkflowCompleted>
     {
         private readonly IHubContext<UserTaskInfoHub, IUserTaskInfoHub> _hubContext;
 
@@ -27,6 +27,13 @@ namespace UserTask.AddOns.Notifications
                     ActivityName = executedActivity.Name
                 });
             }
+        }
+
+        public async Task Handle(WorkflowCompleted notification, CancellationToken cancellationToken)
+        {
+            var test = 1;
+            await Task.CompletedTask;
+            return;
         }
 
         private static bool CheckType(Type activityType)

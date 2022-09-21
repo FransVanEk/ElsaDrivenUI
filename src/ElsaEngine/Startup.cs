@@ -42,6 +42,7 @@ namespace ElsaEngine
             // Notifications
             services.AddSignalR();
             services.AddNotificationHandler<ActivityExecuted, OnExecuteUserTask>();
+            services.AddNotificationHandler<WorkflowCompleted, OnExecuteUserTask>();
 
             // Elsa API endpoints.
             services.AddElsaApiEndpoints()
