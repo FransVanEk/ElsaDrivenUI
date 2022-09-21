@@ -32,15 +32,17 @@
 
     private async Task SendSignalAndData()
     {
+        var workflowInstanceId = Usertask.WorkflowInstanceId;
+        var signal = Usertask.Signal;
+        Usertask = null;
+        await OnFinished.InvokeAsync();
         if(UseDispatch){
-            await userTaskService.MarkAsCompleteDispatched(Usertask.WorkflowInstanceId, Usertask.Signal, taskData);
+            await userTaskService.MarkAsCompleteDispatched(workflowInstanceId, signal, taskData);
         }
         else {
-            await userTaskService.MarkAsComplete(Usertask.WorkflowInstanceId, Usertask.Signal, taskData);
+            await userTaskService.MarkAsComplete(workflowInstanceId, signal, taskData);
         }
-        Usertask = null;
         taskData = new JObject();
         df.ResetData();
-        await OnFinished.InvokeAsync();
     }
 }

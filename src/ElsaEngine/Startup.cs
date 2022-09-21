@@ -41,8 +41,11 @@ namespace ElsaEngine
 
             // Notifications
             services.AddSignalR();
-            services.AddNotificationHandler<ActivityExecuted, OnExecuteUserTask>();
-            services.AddNotificationHandler<WorkflowCompleted, OnExecuteUserTask>();
+            services.AddNotificationHandler<ActivityExecuted, WorkflowNotifier>();
+            services.AddNotificationHandler<ActivityResuming, WorkflowNotifier>();
+            services.AddNotificationHandler<ActivityExecuting, WorkflowNotifier>();
+            services.AddNotificationHandler<WorkflowCompleted, WorkflowNotifier>();
+            services.AddNotificationHandler<ActivityActivating, WorkflowNotifier>();
 
             // Elsa API endpoints.
             services.AddElsaApiEndpoints()
@@ -71,7 +74,7 @@ namespace ElsaEngine
                     
                     // Notifications
                     endpoints.MapBlazorHub();
-                    endpoints.MapHub<UserTaskInfoHub>("/usertask-info");
+                    endpoints.MapHub<WorkflowInstanceInfoHub>("/usertask-info");
                 });
             app.Run();
         }

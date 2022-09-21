@@ -2,18 +2,23 @@
 
 namespace UserTask.AddOns.Notifications
 {
-    public interface IUserTaskInfoHub
+    public interface IWorkflowInstanceInfoHub
     {
-        Task UserTaskInitiated(UserTaskInfo userTask);
+        Task WorkflowInstanceUpdate(WorkflowInstanceInfo workflowInstanceInfo);
     }
 
-    public class UserTaskInfo
+    public class WorkflowInstanceInfo
     {
         public string WorkflowInstanceId { get; internal set; }
+        public string WorkflowState { get; internal set; }
+        public string ActivityId { get;internal set; }
         public string? ActivityName { get; internal set; }
+        public string Action { get; internal set; }
+        public bool IsUsertask { get; internal set; }
+        public string Description { get; internal set; }
     }
 
-    public class UserTaskInfoHub : Hub<IUserTaskInfoHub>
+    public class WorkflowInstanceInfoHub : Hub<IWorkflowInstanceInfoHub>
     {
         public async Task JoinWorkflowInstanceGroup(string workflowInstanceId)
         {
