@@ -1,7 +1,8 @@
 ﻿using DynamicBlazorForm.Core;
-using DynamicBlazorForm.Themes.HTML;
+using DynamicBlazorForm.Themes.RadzenForm;
 using ElsaDrivenWebApp.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using Radzen;
 
 namespace ElsaDrivenWebApp
@@ -30,10 +31,18 @@ namespace ElsaDrivenWebApp
             services.AddScoped(sp => new UsertaskService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
             services.AddScoped(sp => new ProcessService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
 
+            //signalR for notifications 
+            services.AddSingleton<HubConnection>(sp => {
+                return new HubConnectionBuilder()
+                    .WithUrl("https://localhost:7210/usertask-info")
+                    .WithAutomaticReconnect()
+                    .Build();
+            });
+
             //dynamic form
             services.AddScoped(sp =>
                 new DynamicElementsRepository()
-                    .GetHTMLDefaultSettings()
+                    .GetRadzenDefaultSettings()
                     .Add("TextInput", typeof(TextInput))
                     .Add("NumberInput", typeof(NumberInput))
                     .Add("BoolInput", typeof(BoolInput))

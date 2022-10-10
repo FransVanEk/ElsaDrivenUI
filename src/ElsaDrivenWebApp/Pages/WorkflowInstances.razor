@@ -1,5 +1,8 @@
 ﻿@page "/WorkflowInstances"
+
 @using ElsaDrivenWebApp.Shared.Components
+@using Radzen
+@using Radzen.Blazor
 
 <h3>WorkflowInstances</h3>
 
@@ -13,48 +16,53 @@
 }
 else
 {
-    <table class="table">
-        <tr>
-            <td><input @bind="inputValue" /></td>
-            <td><button @onclick="() => AddSample2Task()">Start Sample 2 workflow</button></td>
-            <td><button @onclick="() => AddSample3Task()">Start Sample 3 workflow</button></td>
-            <td><button @onclick="() => AddSample4Task()">Start Sample 4 workflow</button></td>
-        </tr>
-    </table>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Instance name</th>
-                <th>State</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var workflowInstance in workflowInstances)
-            {
-                <tr>
-                    <td>
-                        <a href="workflowinstances/@workflowInstance.WorkflowInstanceId">@workflowInstance.DefinitionId</a>
-                    </td>
-                    <td>
-                        @workflowInstance.WorkflowName
-                    </td>
-                    <td>
-                        @workflowInstance.State
-                    </td>
-                    <td>
-                        @foreach (var usertask in workflowInstance.UserTasks)
-                        {
-                            <button @onclick="() => Open(usertask)">@usertask.TaskTitle - @usertask.TaskDescription</button>
-                            <br />
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenFieldset Text="Start new">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <RadzenButton Click=@AddSample2Task>Start Sample 2 workflow</RadzenButton>
+                        </div>
+                        <div class="col-md-4">
+                            <RadzenButton Click=@AddSample3Task>Start Sample 3 workflow</RadzenButton>
+                        </div>
+                        <div class="col-md-4">
+                            <RadzenButton Click=@AddSample4Task>Start Sample 4 workflow</RadzenButton>
+                        </div>
+                    </div>
+                </RadzenFieldset>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenFieldset Text="running">
+                    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                                Data="@workflowInstances" TItem="WorkfowInstanceUsertaskViewModel" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="WorkfowInstanceUsertaskViewModel" Property="DefinitionId" Title="Name" Width="300px" />
+                            <RadzenDataGridColumn TItem="WorkfowInstanceUsertaskViewModel" Property="WorkflowName" Title="instance name" Width="300px" />
+                            <RadzenDataGridColumn TItem="WorkfowInstanceUsertaskViewModel" Property="State" Title="State" Width="300px" />
+                            <RadzenDataGridColumn Width="160px" TItem="WorkfowInstanceUsertaskViewModel" Property="WorkflowInstanceId" Title="Action">
+                                <Template Context="data">
+                                    @foreach (var usertask in data.UserTasks)
+                                    {
+                                        <RadzenButton ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" Icon="info" Class="m-1" Click=@(() => Open(usertask))>
+                                            @usertask.TaskTitle - @usertask.TaskDescription
+                                        </RadzenButton>
+                                        <br />
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenFieldset>
+            </div>
+        </div>
+    </div>
+  
     <Usertasksample2 Task=selectedUsertasksample2 OnFinished="TaskFinished2"></Usertasksample2>
     <Usertasksample2a Task=selectedUsertasksample2a OnFinished="TaskFinished2a"></Usertasksample2a>
 
@@ -104,7 +112,7 @@ else
                 selectedUsertasksample2a = task;
                 break;
             default:
-                await SendSignal(task);
+                NavManager.NavigateTo($"workflowinstancesSignalr/{task.WorkflowInstanceId}");
                 break;
         }
     }
@@ -135,4 +143,4 @@ else
         var items = await processService.SendSignal("sample4", settings);
         NavManager.NavigateTo($"workflowinstancesSignalr/{items.StartedWorkflows.First().WorkflowInstanceId}");
     }
-}
+    }
