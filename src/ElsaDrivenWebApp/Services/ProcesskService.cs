@@ -24,6 +24,16 @@ namespace ElsaDrivenWebApp.Services
             return await PostObjectJson(new JObject(), $"v1/signals/{signal}/execute");
         }
 
+        public async Task<StartedWorkflowsResponse> SendSignalAsync(string signal, object data)
+        {
+            return await PostObjectJson(data, $"v1/signals/{signal}/dispatch");
+        }
+
+        public async Task<StartedWorkflowsResponse> SendSignalAsync(string signal)
+        {
+            return await PostObjectJson(new JObject(), $"v1/signals/{signal}/dispatch");
+        }
+
         private async Task<StartedWorkflowsResponse> PostObjectJson(object data, string url)
         {
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");

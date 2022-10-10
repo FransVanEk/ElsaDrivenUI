@@ -48,7 +48,7 @@
 
     private async Task SendSignal(UsertaskViewModel task)
     {
-        await userTaskService.MarkAsCompleteAsync(task.WorkflowInstanceId, task.Signal, null);
+        await userTaskService.MarkAsComplete(task.WorkflowInstanceId, task.Signal, null);
         await LoadTask();
     }
 
