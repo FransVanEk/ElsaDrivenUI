@@ -1,19 +1,62 @@
 ﻿@inherits LayoutComponentBase
 
+@using Radzen
+@using Radzen.Blazor
+
+@inject NavigationManager UriHelper;
+@inject DialogService DialogService ;
+@inject TooltipService TooltipService ;
+@inject ContextMenuService ContextMenuService ;
+@inject NotificationService NotificationService ;
+
 <PageTitle>ElsaDrivenWebApp</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<RadzenDialog />
+<RadzenNotification />
+<RadzenTooltip />
+<RadzenContextMenu />
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+<RadzenLayout>
+    <ChildContent>
+        <RadzenHeader>
+            <ChildContent>
+                <div class="row justify-content-start align-items-center">
+                    <div class="col-6 d-flex align-items-center" style="vertical-align: middle">
+                        <RadzenSidebarToggle Click="@SidebarToggle0Click">
+                        </RadzenSidebarToggle>
+                    </div>
+                    <div class="col-6 text-right">
+                        <RadzenHeading Size="H2" style="text-align: justify" Text="Application name">
+                        </RadzenHeading>
+                    </div>
+                </div>
+            </ChildContent>
+        </RadzenHeader>
+        <RadzenBody @ref="contentBody" style="background-color: rgba(32,31,30, 0)">
+            <ChildContent>
+                <RadzenContentContainer Name="main">
+                    @Body
+                </RadzenContentContainer>
+            </ChildContent>
+        </RadzenBody>
+        <RadzenSidebar @ref="navBar" style="border: 1px solid #f0f0f0">
+            <ChildContent>
+                <NavMenu />
+            </ChildContent>
+        </RadzenSidebar>
+    </ChildContent>
+</RadzenLayout>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+@code {
+
+    protected RadzenBody? contentBody;
+    protected RadzenSidebar? navBar;
+
+    protected async System.Threading.Tasks.Task SidebarToggle0Click(dynamic args)
+    {
+        await InvokeAsync(() => { navBar?.Toggle(); });
+
+        await InvokeAsync(() => { contentBody?.Toggle(); });
+    }
+
+}
