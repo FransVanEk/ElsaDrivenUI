@@ -1,33 +1,20 @@
 ﻿using Elsa.Activities.Console;
-using Elsa.Activities.Primitives;
-using Elsa.Activities.Signaling;
 using Elsa.Builders;
 using UserTask.AddOns;
 using NodaTime;
 
 namespace Workflow.Samples
 {
-    internal class Sample4 : IWorkflow
+    internal class Sample5 : IWorkflow
     {
         public void Build(IWorkflowBuilder builder)
         {
-            builder
-                .StartWith<SignalReceived>(a =>
-                {
-                    a.Set(x => x.Signal, "sample4");
-                    a.Set(x => x.Id, "SignalReceived4");
+            builder.Name = "theName";
 
-                }).WithName("Signal received")
-                 .Then<SetVariable>(a =>
-                    {
-                        a.Set(x => x.VariableName, "Name");
-                        a.Set(x => x.Value, context =>  context.GetInput<SampleSettings>());
-                    }).WithName("Signal received").WithDisplayName("mooi man")
-                .SetName(context => ((SampleSettings)context.GetVariable("Name")).Name).WithName("Variable initialized")
-                .WriteLine($"Starting workflow").WithName("Write log")
-                .Then<UserTaskSignal>(a =>
+            builder.WithWorkflowDefinitionId("theId").WithVersion(2)
+                .StartWith<UserTaskSignal>(a =>
                 {
-                    a.Set(x => x.Signal, "usertasksample4");
+                    a.Set(x => x.Signal, "usertasksample5");
                     a.Set(x => x.TaskName, "Demo Sample4");
                     a.Set(x => x.TaskTitle, "Dynamic forms");
                     a.Set(x => x.UIDefinition, "{\"groups\":[{\"name\":\"demo\",\"layoutHint\":\"\",\"subGroups\":[{\"layoutHint\":\"\",\"index\":1,\"items\":[{\"index\":1,\"span\":4,\"path\":\"$.demo1.test3\",\"typeName\":\"NumberInput\",\"layoutHint\":\"\",\"text\":\"leeftijd\",\"groups\":[],\"customData\":{}},{\"index\":2,\"span\":8,\"path\":\"$.demo1.test2\",\"typeName\":\"TextInput\",\"layoutHint\":\"\",\"text\":\"leeftijd in text\",\"groups\":[],\"customData\":{}}]},{\"layoutHint\":\"\",\"index\":2,\"items\":[{\"index\":1,\"span\":4,\"path\":\"$.demo1.test1\",\"typeName\":\"DateInput\",\"layoutHint\":\"\",\"text\":\"datum\",\"groups\":[],\"customData\":{}},{\"index\":2,\"span\":8,\"path\":\"$.demo1.test2\",\"typeName\":\"TextInput\",\"layoutHint\":\"\",\"text\":\"leeftijd in text\",\"groups\":[],\"customData\":{}}]}]}],\"title\":\"leeftijds vragen\"}");
@@ -35,7 +22,6 @@ namespace Workflow.Samples
                 }
                 ).WithName("Age questions")
                 .Then<Elsa.Activities.Timers.Timer>(a => { a.Set(x => x.Timeout, Duration.FromSeconds(3)); }).WithName("Fetching data")
-                .SetName(context => ((SampleSettings)context.GetVariable("Name")).Name).WithName("Variable initialized")
                 .Then<Elsa.Activities.Timers.Timer>(a => { a.Set(x => x.Timeout, Duration.FromSeconds(2)); }).WithName("Validating")
                 .Then<Elsa.Activities.Timers.Timer>(a => { a.Set(x => x.Timeout, Duration.FromSeconds(1)); }).WithName("Calculating")
                 .Then<UserTaskSignal>(a =>
@@ -47,7 +33,9 @@ namespace Workflow.Samples
                     a.Set(x => x.TaskName, "Second usertask");
                 }
                 ).WithName("Random text question")
-                .WriteLine($"Workflow is done").WithName("Log finializing the workflow");
+                .Then<Elsa.Activities.Timers.Timer>(a => { a.Set(x => x.Timeout, Duration.FromMilliseconds(500)); }).WithName("Saving")
+                .WriteLine($"Workflow is done")
+                        .WithName("Log finializing the workflow");
         }
     }
 }

@@ -10,6 +10,8 @@ namespace ElsaDrivenWebApp.Services
     {
         private readonly HttpClient httpClient;
         public Dictionary<string, UsertaskViewModel> workflowInstancesCache = new Dictionary<string, UsertaskViewModel>();
+        public List<UsertaskViewModel> TriggerCache = new List<UsertaskViewModel>();
+        public bool AreTriggersLoaded = false;
 
         public UsertaskService(HttpClient httpClient)
         {
@@ -19,6 +21,14 @@ namespace ElsaDrivenWebApp.Services
         public async Task<UsertaskViewModel[]> GetWorkflowsForSignal(string signal)
         {
             return await httpClient.GetFromJsonAsync<UsertaskViewModel[]>($"/v1/usertask-signals/{signal}");
+        }
+
+        public async Task<UsertaskViewModel[]> GetWorkflowsTriggersForUsertask()
+        {
+            var triggers = await httpClient.GetFromJsonAsync<UsertaskViewModel[]>($"/v1/usertask-signals/triggers");
+            TriggerCache = triggers == null ? new List<UsertaskViewModel>() : triggers.ToList();
+            AreTriggersLoaded = true;
+            return TriggerCache.ToArray();
         }
 
         public async Task<WorkfowInstanceUsertaskViewModel[]> GetWorkflowsWaitingOnUserTask()
@@ -61,6 +71,18 @@ namespace ElsaDrivenWebApp.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             await httpClient.PostAsync($"/v1/usertask-signals/{signal}/dispatch", content);
+        }
+
+        public async Task<List<WorkflowInstanceDetails>> StartWorkflowWithUserTaskDispatched(string signal, JToken signalData)
+        {
+            var data = new MarkAsCompletedPostModel
+            {
+                Input = signalData == null ? JValue.CreateNull() : signalData
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var result = await httpClient.PostAsync($"/v1/usertask-signals/{signal}/dispatch", content);
+            return await result?.Content?.ReadFromJsonAsync<List<WorkflowInstanceDetails>>();
         }
     }
 }

@@ -1,0 +1,50 @@
+﻿@page "/WorkflowStarter/{signal}"
+@using ElsaDrivenWebApp.Shared.Components
+
+@inject UsertaskService usertaskService
+@inject NavigationManager NavManager
+
+@if (usertask != null)
+{
+    <DynamicForm @ref="df" Layout="@(GetLayout())" @bind-Value=taskData></DynamicForm>
+
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button @onclick="() => TaskFinished()">Continue</button>
+        </div>
+    </div>
+}
+else
+{
+    <h1>Trigger not found!</h1>
+}
+@code {
+
+    [Parameter]
+    public string signal { get; set; } = string.Empty;
+
+    private UsertaskViewModel? usertask;
+  
+    private JToken taskData { get; set; } = new JObject();
+    private DynamicForm df { get; set; }
+
+    private DynamicLayout? GetLayout()
+    {
+        return JsonConvert.DeserializeObject<DynamicLayout>(usertask.UIDefinition);
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (!usertaskService.AreTriggersLoaded)
+        {
+            await usertaskService.GetWorkflowsTriggersForUsertask();
+        }
+        usertask = usertaskService.TriggerCache.FirstOrDefault(t => t.Signal == signal);
+    }
+
+    private async Task TaskFinished()
+    {
+        var items = await usertaskService.StartWorkflowWithUserTaskDispatched(signal, taskData);
+        NavManager.NavigateTo($"workflowinstancesSignalr/{items.First().WorkflowInstanceId}");
+    }
+}

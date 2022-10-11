@@ -1,8 +1,6 @@
 ﻿using Elsa.Events;
-using Elsa.Models;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using System;
 
 namespace UserTask.AddOns.Notifications
 {
