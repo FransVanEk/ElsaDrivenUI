@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Elsa.Abstractions" Version="2.8.2" />
-    <PackageReference Include="Elsa.Activities.Console" Version="2.8.2" />
-    <PackageReference Include="Elsa.Activities.Http" Version="2.8.2" />
+    <PackageReference Include="Elsa.Abstractions" Version="2.10.0-preview.467" />
+    <PackageReference Include="Elsa.Activities.Console" Version="2.10.0-preview.467" />
+    <PackageReference Include="Elsa.Activities.Http" Version="2.10.0-preview.467" />
     <PackageReference Include="Elsa.Activities.Timers" Version="2.0.0-preview7.1545" />
   </ItemGroup>
 
