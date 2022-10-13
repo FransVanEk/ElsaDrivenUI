@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElsaDrivenWebApp", "ElsaDri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserTask.AddOns", "UserTaskSignal\UserTask.AddOns.csproj", "{3A4998ED-CD70-4AEE-882D-CA5CB24BEAA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workflow.Samples", "Workflow.Samples\Workflow.Samples.csproj", "{BAF5F483-45AB-44C2-96DD-52819B20D158}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workflow.Samples", "Workflow.Samples\Workflow.Samples.csproj", "{BAF5F483-45AB-44C2-96DD-52819B20D158}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

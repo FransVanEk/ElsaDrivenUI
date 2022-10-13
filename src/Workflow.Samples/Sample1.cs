@@ -1,5 +1,4 @@
 ﻿using Elsa.Activities.Console;
-using Elsa.Activities.Http;
 using Elsa.Activities.Signaling;
 using Elsa.Builders;
 using UserTask.AddOns;

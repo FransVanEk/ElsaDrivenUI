@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Elsa.Server.Api.Endpoints.Signals;
 using UserTask.AddOns.Endpoints.Models;
 using UserTask.AddOns.Extensions;
+using Rebus.Extensions;
 
 namespace UserTask.AddOns.Endpoints
 {
@@ -66,18 +67,36 @@ namespace UserTask.AddOns.Endpoints
             return Ok(collectedWorkflows.ToList());
         }
 
-        [HttpGet("{signalName}")]
+        [HttpGet]
         // [ElsaJsonFormatter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExecuteSignalResponse))]
         [SwaggerOperation(
-           Summary = "Gets all workflows waiting for a specific signal to be returned",
+           Summary = "Gets all workflows waiting any usertaks signal",
            Description = "return a list of workflow instances",
            OperationId = "Usertask" +
             "Signals.Query",
            Tags = new[] { "UsertaskSignals" })
        ]
+        public async Task<IActionResult> CollectWaitingWorkflowInstances(CancellationToken cancellationToken = default)
+        {
+            var bookmarkResults = await bookmarkFinder.FindBookmarksByTypeAsync(typeof(UserTaskSignalBookmark).GetSimpleAssemblyQualifiedName());
+            var workflowInstanceIds = new WorkflowInstanceIdsSpecification(bookmarkResults.Select(x => x.WorkflowInstanceId).ToList());
+            var workflowInstances = await workflowInstanceStore.FindManyAsync(workflowInstanceIds, null, null, cancellationToken);
+            var viewmodelResult = workflowInstances.ConvertToWorkflowInstanceUsertaskViewModels(serverContext, bookmarkResults);
+            return Ok(viewmodelResult.ToList());
+        }
+
+        [HttpGet("{signalName}")]
+        // [ElsaJsonFormatter]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExecuteSignalResponse))]
+        [SwaggerOperation(
+          Summary = "Gets all workflows waiting for a specific signal to be returned",
+          Description = "return a list of workflow instances",
+          OperationId = "CustomSignals.Query",
+          Tags = new[] { "UsertaskSignals" })
+      ]
         public async Task<IActionResult> Collect(string signalName,
-           CancellationToken cancellationToken = default)
+          CancellationToken cancellationToken = default)
         {
             string normalizedSignal = signalName.ToLowerInvariant();
 
@@ -86,7 +105,7 @@ namespace UserTask.AddOns.Endpoints
             var workflowInstanceIds = new WorkflowInstanceIdsSpecification(bookmarkResults.Select(x => x.WorkflowInstanceId).ToList());
             var workflowInstances = await workflowInstanceStore.FindManyAsync(workflowInstanceIds, null, null, cancellationToken);
 
-            var viewmodelResult = workflowInstances.ConvertToViewModels(serverContext);
+            var viewmodelResult = workflowInstances.ConvertToUsertaskViewModels(serverContext);
             normalizedSignal = null;
             return Ok(viewmodelResult.ToList());
         }
