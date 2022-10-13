@@ -28,7 +28,7 @@
 
     private async Task SendSignalAndData()
     {
-        await userTaskService.MarkAsCompleteAsync(Task.WorkflowInstanceId, Task.Signal, JsonConvert.SerializeObject(data));
+        await userTaskService.MarkAsComplete(Task.WorkflowInstanceId, Task.Signal, JsonConvert.SerializeObject(data));
         await OnFinished.InvokeAsync();
         Task = null;
     }
