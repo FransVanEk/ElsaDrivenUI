@@ -1,0 +1,32 @@
+﻿@using Radzen.Blazor
+@inject UsertaskService usertaskService;
+<RadzenPanelMenu style="height: 696px">
+    <ChildContent>
+        <RadzenPanelMenuItem Text="Home" Path="">
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="Sample Tasks" Path="tasks/usertasksample1">
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="Sample Workflows" Path="WorkflowInstances">
+        </RadzenPanelMenuItem>
+        @foreach (var item in triggerWorkflows)
+        {
+          <RadzenPanelMenuItem Text=@item.Signal Path=@($"WorkflowStarter/{item.Signal}") />
+        }
+    </ChildContent>
+</RadzenPanelMenu>
+
+@code {
+    List<UsertaskViewModel> triggerWorkflows = new List<UsertaskViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!usertaskService.AreTriggersLoaded)
+        {
+            await usertaskService.GetWorkflowsTriggersForUsertask();
+        }
+        triggerWorkflows = usertaskService.TriggerCache;
+
+        await base.OnInitializedAsync();
+    }
+
+}

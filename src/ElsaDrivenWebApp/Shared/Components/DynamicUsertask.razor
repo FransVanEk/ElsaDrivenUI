@@ -1,0 +1,48 @@
+﻿@inject UsertaskService userTaskService
+@if(Usertask !=null)
+{
+<DynamicForm  @ref="df" Layout="@(GetLayout())"  @bind-Value=taskData></DynamicForm>
+
+<div class="row">
+    <div class="col-md-12 text-right">
+         <button @onclick="() => SendSignalAndData()">Continue</button>
+    </div>
+</div>
+}
+
+@code {
+
+    [Parameter]
+    public UsertaskViewModel? Usertask { get; set; }
+
+    [Parameter]
+    public bool UseDispatch { get; set; } = false;
+
+    [Parameter]
+    public EventCallback OnFinished { get; set; }
+
+    private JToken taskData { get; set; } = new JObject();
+    private DynamicForm df { get; set; }
+
+
+    private DynamicLayout? GetLayout()
+    {
+        return JsonConvert.DeserializeObject<DynamicLayout>(Usertask.UIDefinition);
+    }
+
+    private async Task SendSignalAndData()
+    {
+        var workflowInstanceId = Usertask.WorkflowInstanceId;
+        var signal = Usertask.Signal;
+        Usertask = null;
+        await OnFinished.InvokeAsync();
+        if(UseDispatch){
+            await userTaskService.MarkAsCompleteDispatched(workflowInstanceId, signal, taskData);
+        }
+        else {
+            await userTaskService.MarkAsComplete(workflowInstanceId, signal, taskData);
+        }
+        taskData = new JObject();
+        df.ResetData();
+    }
+}
