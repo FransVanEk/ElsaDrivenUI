@@ -1,0 +1,52 @@
+﻿@page "/WorkflowInstances/{workflowinstanceid}"
+@using ElsaDrivenWebApp.Shared.Components
+
+@inject UsertaskService userTaskService
+@inject ProcessService processService
+
+@if (usertask != null)
+{
+    switch (usertask.Signal)
+    {
+        case "usertasksample2":
+            <Usertasksample2 Task=usertask OnFinished="TaskFinished"></Usertasksample2>
+            break;
+        case "usertasksample2a":
+            <Usertasksample2a Task=usertask OnFinished="TaskFinished"></Usertasksample2a>
+            break;
+        default:
+            <button @onclick="() => SendSignal(usertask)">Finalize @usertask.TaskTitle</button>
+            break;
+    }
+}
+
+@code {
+
+    [Parameter]
+    public string workflowinstanceid { get; set; } = string.Empty;
+
+    private UsertaskViewModel? usertask;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await LoadTask();
+
+    }
+
+    private async Task LoadTask()
+    {
+        var workflowInstance = await userTaskService.GetUsertasksFor(workflowinstanceid);
+        usertask = workflowInstance?.UserTasks?.FirstOrDefault();
+    }
+
+    private async Task SendSignal(UsertaskViewModel task)
+    {
+        await userTaskService.MarkAsCompleteAsync(task.WorkflowInstanceId, task.Signal, null);
+        await LoadTask();
+    }
+
+    private async Task TaskFinished()
+    {
+        await LoadTask();
+    }
+}

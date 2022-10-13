@@ -33,6 +33,12 @@ namespace ElsaDrivenWebApp.Services
             return result.ToArray();
         }
 
+        public async Task<WorkfowInstanceUsertaskViewModel> GetUsertasksFor(string workflowinstanceId)
+        {
+            var items = await httpClient.GetFromJsonAsync<WorkfowInstanceUsertaskViewModel[]>($"/v1/usertask-signals?workflowinstanceId={workflowinstanceId}");
+
+            return items?.FirstOrDefault();
+        }
 
         public async Task MarkAsCompleteAsync(string workflowInstanceId, string signal, JToken signalData)
         {
