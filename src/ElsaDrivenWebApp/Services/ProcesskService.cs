@@ -14,20 +14,31 @@ namespace ElsaDrivenWebApp.Services
             this.httpClient = httpClient;
         }
 
-        public async Task SendSignal(string signal, object data)
+        public async Task<StartedWorkflowsResponse> SendSignal(string signal, object data)
         {
-            await PostObjectJson(data, $"v1/signals/{signal}/execute");
+           return await PostObjectJson(data, $"v1/signals/{signal}/execute");
         }
 
-        public async Task SendSignal(string signal)
+        public async Task<StartedWorkflowsResponse> SendSignal(string signal)
         {
-            await PostObjectJson(new JObject(), $"v1/signals/{signal}/execute");
+            return await PostObjectJson(new JObject(), $"v1/signals/{signal}/execute");
         }
 
-        private async Task PostObjectJson(object data, string url)
+        private async Task<StartedWorkflowsResponse> PostObjectJson(object data, string url)
         {
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-            await httpClient.PostAsync(url, content);
+            var result = await httpClient.PostAsync(url, content);
+            return await result?.Content?.ReadFromJsonAsync<StartedWorkflowsResponse>();
         }
+    }
+
+    public class StartedWorkflowsResponse
+    {
+        public List<WorkflowInstanceDetails> StartedWorkflows { get; set; } = new List<WorkflowInstanceDetails>();
+    }
+
+    public class WorkflowInstanceDetails
+    {
+        public string WorkflowInstanceId { get; set; } = string.Empty;
     }
 }

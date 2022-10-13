@@ -1,4 +1,9 @@
 using ElsaDrivenWebApp.Services;
+using DynamicBlazorForm.Core;
+using DynamicBlazorForm.Themes.HTML;
+using Newtonsoft.Json;
+using DynamicBlazorForm.Core.Layout;
+using DynamicBlazorForm.Core.Layout.FluentApi;
 
 var builder = WebApplication.CreateBuilder(args);
 var baseAddress = builder.Configuration["UsertaskService:BaseAddress"];
@@ -8,6 +13,14 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped(sp => new UsertaskService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
 builder.Services.AddScoped(sp => new ProcessService(new HttpClient { BaseAddress = new Uri(baseAddress) }));
 
+//dynamic form
+builder.Services.AddScoped(sp =>
+    new DynamicElementsRepository()
+        .GetHTMLDefaultSettings()
+        .Add("TextInput", typeof(TextInput))
+        .Add("NumberInput", typeof(NumberInput))
+        .Add("BoolInput", typeof(BoolInput))
+        .Add("DateInput", typeof(DateInput)));
 
 var app = builder.Build();
 

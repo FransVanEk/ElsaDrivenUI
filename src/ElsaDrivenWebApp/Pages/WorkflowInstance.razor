@@ -1,4 +1,5 @@
 ﻿@page "/WorkflowInstances/{workflowinstanceid}"
+
 @using ElsaDrivenWebApp.Shared.Components
 
 @inject UsertaskService userTaskService
@@ -15,7 +16,12 @@
             <Usertasksample2a Task=usertask OnFinished="TaskFinished"></Usertasksample2a>
             break;
         default:
-            <button @onclick="() => SendSignal(usertask)">Finalize @usertask.TaskTitle</button>
+            if(string.IsNullOrEmpty(usertask.UIDefinition)){
+                    <button @onclick="() => SendSignal(usertask)">Finalize @usertask.TaskTitle</button>
+            }
+            else {
+                <DynamicUsertask OnFinished="TaskFinished" Usertask=usertask></DynamicUsertask>
+            }
             break;
     }
 }
@@ -37,6 +43,7 @@
     {
         var workflowInstance = await userTaskService.GetUsertasksFor(workflowinstanceid);
         usertask = workflowInstance?.UserTasks?.FirstOrDefault();
+        
     }
 
     private async Task SendSignal(UsertaskViewModel task)
