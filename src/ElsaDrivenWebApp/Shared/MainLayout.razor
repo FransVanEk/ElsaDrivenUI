@@ -16,35 +16,26 @@
 <RadzenTooltip />
 <RadzenContextMenu />
 
+<RadzenDialog />
+<RadzenNotification />
+<RadzenTooltip />
+<RadzenContextMenu />
+
 <RadzenLayout>
-    <ChildContent>
-        <RadzenHeader>
-            <ChildContent>
-                <div class="row justify-content-start align-items-center">
-                    <div class="col-6 d-flex align-items-center" style="vertical-align: middle">
-                        <RadzenSidebarToggle Click="@SidebarToggle0Click">
-                        </RadzenSidebarToggle>
-                    </div>
-                    <div class="col-6 text-right">
-                        <RadzenHeading Size="H2" style="text-align: justify" Text="Application name">
-                        </RadzenHeading>
-                    </div>
-                </div>
-            </ChildContent>
-        </RadzenHeader>
-        <RadzenBody @ref="contentBody" style="background-color: rgba(32,31,30, 0)">
-            <ChildContent>
-                <RadzenContentContainer Name="main">
-                    @Body
-                </RadzenContentContainer>
-            </ChildContent>
-        </RadzenBody>
-        <RadzenSidebar @ref="navBar" style="border: 1px solid #f0f0f0">
-            <ChildContent>
-                <NavMenu />
-            </ChildContent>
-        </RadzenSidebar>
-    </ChildContent>
+  <ChildContent>
+    <RadzenBody @ref="contentBody">
+      <ChildContent>
+        <RadzenContentContainer Name="main">
+        @Body
+        </RadzenContentContainer>
+      </ChildContent>
+    </RadzenBody>
+    <RadzenSidebar @ref="navBar">
+      <ChildContent>
+       <NavMenu />
+      </ChildContent>
+    </RadzenSidebar>
+  </ChildContent>
 </RadzenLayout>
 
 @code {
