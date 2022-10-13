@@ -312,7 +312,7 @@ body {
   line-height: 1.5;
   color: #3b3a39;
   text-align: left;
-  background-color: #ffffff;
+  background-color: #ebebeb;
 }
 
 [tabindex="-1"]:focus {
@@ -1435,7 +1435,7 @@ template {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -8592,6 +8592,52 @@ p-button[type] {
   width: 1rem;
 }
 
+.rz-button-xs, .rz-selectbutton .rz-button.rz-button-xs, .rz-selectbutton .rz-button-xs.rz-paginator-element, .rz-splitbutton .rz-button-xs {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.125rem 0.25rem;
+  height: auto;
+  line-height: 1rem;
+  min-height: 1.25rem;
+  min-width: 1.25rem;
+}
+
+.rz-button-xs .rz-button-box, .rz-selectbutton .rz-button.rz-button-xs .rz-button-box, .rz-selectbutton .rz-button-xs.rz-paginator-element .rz-button-box {
+  line-height: 1rem;
+  gap: 0.125rem;
+}
+
+.rz-button-xs.rz-button-icon-left, .rz-selectbutton .rz-button-icon-left.rz-button.rz-button-xs, .rz-selectbutton .rz-button-icon-left.rz-button-xs.rz-paginator-element {
+  padding: 0 0.5rem;
+}
+
+.rz-button-xs.rz-button-icon-only, .rz-button-xs.rz-paginator-element, .rz-selectbutton .rz-button-icon-only.rz-button.rz-button-xs, .rz-selectbutton .rz-button-xs.rz-paginator-element {
+  padding: 0.125rem;
+}
+
+.rz-button-xs .rzi, .rz-button-xs .rz-column-drag, .rz-button-xs .rz-datatable-loading-content .rzi-circle-o-notch, .rz-datatable-loading-content .rz-button-xs .rzi-circle-o-notch, .rz-button-xs .rz-datatable-header .rzi-plus, .rz-datatable-header .rz-button-xs .rzi-plus, .rz-button-xs .rz-sortable-column .rzi-grid-sort, .rz-sortable-column .rz-button-xs .rzi-grid-sort, .rz-button-xs .rz-datatable .rzi-chevron-circle-down, .rz-datatable .rz-button-xs .rzi-chevron-circle-down, .rz-button-xs .rz-datatable .rzi-chevron-circle-right, .rz-datatable .rz-button-xs .rzi-chevron-circle-right, .rz-button-xs .rz-fileupload-row .rz-button .rzi-close, .rz-button-xs .rz-fileupload-row .rz-paginator-element .rzi-close, .rz-fileupload-row .rz-button .rz-button-xs .rzi-close, .rz-fileupload-row .rz-paginator-element .rz-button-xs .rzi-close,
+.rz-button-xs .rz-fileupload-row .rz-button .rzi-times,
+.rz-button-xs .rz-fileupload-row .rz-paginator-element .rzi-times,
+.rz-fileupload-row .rz-button .rz-button-xs .rzi-times,
+.rz-fileupload-row .rz-paginator-element .rz-button-xs .rzi-times,
+.rz-button-xs .rz-fileupload-row .rz-button .rz-icon-trash,
+.rz-button-xs .rz-fileupload-row .rz-paginator-element .rz-icon-trash,
+.rz-fileupload-row .rz-button .rz-button-xs .rz-icon-trash,
+.rz-fileupload-row .rz-paginator-element .rz-button-xs .rz-icon-trash, .rz-selectbutton .rz-button.rz-button-xs .rzi, .rz-selectbutton .rz-button-xs.rz-paginator-element .rzi, .rz-selectbutton .rz-button.rz-button-xs .rz-column-drag, .rz-selectbutton .rz-button-xs.rz-paginator-element .rz-column-drag, .rz-selectbutton .rz-fileupload-row .rz-button.rz-button-xs .rzi-close, .rz-selectbutton .rz-fileupload-row .rz-button-xs.rz-paginator-element .rzi-close, .rz-fileupload-row .rz-selectbutton .rz-button.rz-button-xs .rzi-close, .rz-fileupload-row .rz-selectbutton .rz-button-xs.rz-paginator-element .rzi-close,
+.rz-selectbutton .rz-fileupload-row .rz-button.rz-button-xs .rzi-times,
+.rz-selectbutton .rz-fileupload-row .rz-button-xs.rz-paginator-element .rzi-times,
+.rz-fileupload-row .rz-selectbutton .rz-button.rz-button-xs .rzi-times,
+.rz-fileupload-row .rz-selectbutton .rz-button-xs.rz-paginator-element .rzi-times,
+.rz-selectbutton .rz-fileupload-row .rz-button.rz-button-xs .rz-icon-trash,
+.rz-selectbutton .rz-fileupload-row .rz-button-xs.rz-paginator-element .rz-icon-trash,
+.rz-fileupload-row .rz-selectbutton .rz-button.rz-button-xs .rz-icon-trash,
+.rz-fileupload-row .rz-selectbutton .rz-button-xs.rz-paginator-element .rz-icon-trash, .rz-button-xs .rz-menuitem .rz-menuitem-icon, .rz-menuitem .rz-button-xs .rz-menuitem-icon {
+  font-size: 1rem;
+  height: 1rem;
+  line-height: 1rem;
+  width: 1rem;
+}
+
 @keyframes button-icon-spin {
   from {
     transform: rotate(0deg);
@@ -9237,13 +9283,13 @@ p-button[type] {
   --rz-input-value-color: #323130;
   --rz-input-placeholder-color: #605e5c;
   --rz-input-background-color: #ffffff;
-  --rz-input-border: 1px solid #d2d0ce;
-  --rz-input-border-radius: 4px;
+  --rz-input-border: 1px solid #0099dd;
+  --rz-input-border-radius: 8px;
   --rz-input-shadow: none;
   --rz-input-hover-shadow: none;
   --rz-input-hover-border: 1px solid #a19f9d;
   --rz-input-focus-shadow: inset 0 0 0 1px var(--rz-primary);
-  --rz-input-focus-border: 1px solid #0078d4;
+  --rz-input-focus-border: 2px solid #0099DD;
   --rz-input-disabled-border: 1px solid #f3f2f1;
   --rz-input-disabled-shadow: none;
   --rz-input-disabled-background-color: #f3f2f1;
@@ -10368,8 +10414,8 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
   --rz-steps-number-color: #ffffff;
   --rz-steps-number-background-color: #8a8886;
   --rz-steps-number-selected-color: #ffffff;
-  --rz-steps-number-selected-background: #0078d4;
-  --rz-steps-title-selected-color: #0078d4;
+  --rz-steps-number-selected-background: #0099DD;
+  --rz-steps-title-selected-color: #0099DD;
   --rz-steps-title-margin: 0 1rem 0 0.5rem;
   --rz-steps-buttons-padding: 1rem 0;
   --rz-steps-button-color: #3b3a39;
@@ -11644,6 +11690,32 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
   display: inline-flex;
 }
 
+.rz-selectbutton .rz-button.rz-button-xs, .rz-selectbutton .rz-button-xs.rz-paginator-element {
+  margin-left: -1px;
+  display: inline-block;
+  background-color: var(--rz-selectbar-background-color);
+  color: var(--rz-selectbar-color);
+  border: var(--rz-selectbar-border);
+  border-radius: 0;
+}
+
+.rz-selectbutton .rz-button.rz-button-xs:first-child, .rz-selectbutton .rz-button-xs.rz-paginator-element:first-child {
+  margin-left: 0;
+  border-top-left-radius: var(--rz-selectbar-border-radius);
+  border-bottom-left-radius: var(--rz-selectbar-border-radius);
+}
+
+.rz-selectbutton .rz-button.rz-button-xs:last-child, .rz-selectbutton .rz-button-xs.rz-paginator-element:last-child {
+  border-top-right-radius: var(--rz-selectbar-border-radius);
+  border-bottom-right-radius: var(--rz-selectbar-border-radius);
+}
+
+.rz-selectbutton .rz-button.rz-button-xs.rz-state-active, .rz-selectbutton .rz-button-xs.rz-state-active.rz-paginator-element {
+  background-color: var(--rz-selectbar-selected-background-color);
+  color: var(--rz-selectbar-selected-color);
+  border: var(--rz-selectbar-selected-border);
+}
+
 .rz-selectbutton .rz-button.rz-button-sm, .rz-selectbutton .rz-button-sm.rz-paginator-element, .rz-selectbutton .rz-fileupload .rz-button, .rz-selectbutton .rz-fileupload .rz-paginator-element, .rz-fileupload .rz-selectbutton .rz-button, .rz-fileupload .rz-selectbutton .rz-paginator-element {
   margin-left: -1px;
   display: inline-block;
@@ -12233,6 +12305,7 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
   --rz-grid-cell-padding: 0.25rem 0.75rem;
   --rz-grid-cell-color: #323130;
   --rz-grid-cell-font-size: var(--rz-body-font-size);
+  --rz-grid-cell-line-height: var(--rz-body-line-height);
   --rz-grid-hover-background-color: #edebe9;
   --rz-grid-hover-color: #201f1e;
   --rz-grid-selected-background-color: #0078d4;
@@ -12495,6 +12568,7 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
 .rz-datatable-tfoot td, .rz-grid-table tfoot td {
   background-color: var(--rz-grid-foot-background-color);
   font-size: var(--rz-grid-cell-font-size);
+  line-height: var(--rz-grid-cell-line-height);
   color: var(--rz-grid-foot-cell-color);
   padding: var(--rz-grid-cell-padding);
   white-space: nowrap;
@@ -12619,6 +12693,7 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
 .rz-datatable-data td .rz-cell-data, .rz-grid-table td .rz-cell-data {
   color: var(--rz-grid-cell-color);
   font-size: var(--rz-grid-cell-font-size);
+  line-height: var(--rz-grid-cell-line-height);
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -12998,10 +13073,6 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
   z-index: 1;
 }
 
-.rz-grid-table thead tr:nth-of-type(2) th {
-  top: 35px;
-}
-
 .rz-grid-table-fixed {
   table-layout: fixed;
 }
@@ -13143,6 +13214,17 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
 .rz-filter-button {
   flex: none;
   margin-right: 0.5rem;
+}
+
+.rz-data-grid.rz-density-compact {
+  --rz-grid-cell-line-height: 1rem;
+  --rz-grid-cell-padding: 0.25rem 0.5rem;
+  --rz-grid-header-cell-padding: 0.25rem 0;
+  --rz-grid-header-padding: 0.25rem 1rem;
+  --rz-grid-header-title-padding: 0 0 0 0.5rem;
+  --rz-grid-filter-padding: 0.25rem 0.5rem;
+  --rz-grid-group-header-padding: 0.25 0.5rem;
+  --rz-grid-group-header-item-padding: 0.25 0.5rem;
 }
 
 :root {
@@ -14635,7 +14717,7 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
 :root {
   --rz-scrollbar-background-color: transparent;
   --rz-scrollbar-color: rgba(0, 0, 0, 0.12);
-  --rz-scrollbar-border-radius: 0;
+  --rz-scrollbar-border-radius: 4;
 }
 
 body:not(.rz-default-scrollbars)::-webkit-scrollbar {
@@ -14714,7 +14796,7 @@ body:not(.rz-default-scrollbars) ::-webkit-scrollbar-corner {
 .rz-login .rz-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .rz-login .rz-form .rz-form-row {
@@ -14732,8 +14814,12 @@ body:not(.rz-default-scrollbars) ::-webkit-scrollbar-corner {
   flex: 3 14rem;
 }
 
-.rz-login .rz-form .rz-form-row .rz-messages-error {
-  position: initial;
+.rz-login .rz-form .rz-form-row .rz-textbox {
+  display: block;
+}
+
+.rz-login .rz-form .rz-form-row .rz-textbox.invalid {
+  border: var(--rz-border-danger);
 }
 
 .rz-login .rz-register {

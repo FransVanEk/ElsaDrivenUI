@@ -44,7 +44,7 @@ namespace ElsaDrivenWebApp
                 new DynamicElementsRepository()
                     .GetRadzenDefaultSettings()
                     .Add("TextInput", typeof(TextInput))
-                    .Add("NumberInput", typeof(NumberInput))
+                    .Add("NumberInput", typeof(DynamicBlazorForm.Themes.HTML.NumberInput))
                     .Add("BoolInput", typeof(BoolInput))
                     .Add("DateInput", typeof(DateInput)));
 
