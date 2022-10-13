@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Elsa.Abstractions" Version="2.10.0-preview.467" />
+    <PackageReference Include="Elsa.Activities.Console" Version="2.10.0-preview.467" />
+    <PackageReference Include="Elsa.Activities.Http" Version="2.10.0-preview.467" />
+    <PackageReference Include="Elsa.Activities.Timers" Version="2.0.0-preview7.1545" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UserTaskSignal\UserTask.AddOns.csproj" />
+  </ItemGroup>
+
+</Project>
