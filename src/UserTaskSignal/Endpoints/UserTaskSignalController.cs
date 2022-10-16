@@ -11,10 +11,10 @@ using UserTask.AddOns.Endpoints.Models;
 using UserTask.AddOns.Extensions;
 using Rebus.Extensions;
 using Elsa.Models;
-using Elsa.Persistence.Specifications.WorkflowDefinitions;
 using Elsa.Persistence.Specifications;
 using System.Linq.Expressions;
-using Elsa.Providers.Workflows;
+using Microsoft.Extensions.DependencyInjection;
+using Elsa;
 
 namespace UserTask.AddOns.Endpoints
 {
@@ -29,11 +29,20 @@ namespace UserTask.AddOns.Endpoints
         private readonly IBookmarkFinder bookmarkFinder;
         private readonly ServerContext serverContext;
         private readonly IWorkflowInstanceStore workflowInstanceStore;
+        private readonly IServiceScopeFactory scopeFactory;
         private readonly IWorkflowDefinitionStore workflowDefinitionStore;
 
-        public UserTaskSignalController(IUserTaskSignalInvoker invoker,IWorkflowRegistry workflowRegistry,  ITriggerFinder triggerFinder, IBookmarkFinder bookmarkFinder, IWorkflowDefinitionStore workflowDefinitionStore, IWorkflowInstanceStore workflowInstanceStore, ServerContext serverContext)
+        public UserTaskSignalController(IUserTaskSignalInvoker invoker,
+                                        IWorkflowRegistry workflowRegistry,
+                                        ITriggerFinder triggerFinder,
+                                        IBookmarkFinder bookmarkFinder,
+                                        IWorkflowDefinitionStore workflowDefinitionStore,
+                                        IWorkflowInstanceStore workflowInstanceStore,
+                                        IServiceScopeFactory scopeFactory,
+                                        ServerContext serverContext)
         {
             this.workflowInstanceStore = workflowInstanceStore;
+            this.scopeFactory = scopeFactory;
             this.serverContext = serverContext;
             this.invoker = invoker;
             this.workflowRegistry = workflowRegistry;
@@ -116,34 +125,36 @@ namespace UserTask.AddOns.Endpoints
        ]
         public async Task<IActionResult> Triggers(CancellationToken cancellationToken = default)
         {
-            var triggerResults = await triggerFinder.FindTriggersByTypeAsync(typeof(UserTaskSignalBookmark).GetSimpleAssemblyQualifiedName(),"");
-            var triggerText = System.Text.Json.JsonSerializer.Serialize(triggerResults);
-            var ids = triggerResults.Select(x => x.WorkflowDefinitionId).ToList();
-            var workflowDefinitionIds = new myWorkflowDefinitionIdsSpecification(ids);
-            var manyFilter = new ManyWorkflowDefinitionIdsSpecification(ids);
-            var throughRegistry2 = await workflowRegistry.FindManyByDefinitionIds(ids, VersionOptions.Published, cancellationToken);
+            using var scope = scopeFactory.CreateScope();
 
+            var triggerResults = await triggerFinder.FindTriggersByTypeAsync(typeof(UserTaskSignalBookmark).GetSimpleAssemblyQualifiedName(), "");
+            var ids = triggerResults.Select(x => new { WorkflowDefinitionId = x.WorkflowDefinitionId , ActivityId = x.ActivityId }).ToList();
+            var workflowBlueprintReflector = scope.ServiceProvider.GetRequiredService<IWorkflowBlueprintReflector>();
+              var viewmodelResult = new List<UsertaskViewModel>();
 
-            var workflowDefinitions = await workflowDefinitionStore.FindManyAsync(manyFilter);
-            var throughRegistry = await workflowRegistry.FindManyByDefinitionIds(ids,VersionOptions.All,cancellationToken);
-            var throughRegistryByName = await workflowRegistry.FindManyByNames(new[] { "theName" }, cancellationToken);
-            var throughRegistryByIds = await workflowRegistry.FindManyByDefinitionIds(new List<string> { "theId" } , VersionOptions.All, cancellationToken);
+            foreach (var trigger in ids)
+            {
+                var blueprints = await workflowRegistry.FindManyByDefinitionIds(new List<string> { trigger.WorkflowDefinitionId }, VersionOptions.All, cancellationToken);
+                foreach (var blueprint in blueprints)
+                {
 
-            //.FindManyAsync(workflowDefinitionIds, null, null, cancellationToken);
+                    var workflowBlueprintWrapper = await workflowBlueprintReflector.ReflectAsync(scope.ServiceProvider, blueprint, cancellationToken);
 
-            var viewmodelResult = new List<UsertaskViewModel>
-             {
-                 new UsertaskViewModel{
-                     TaskTitle = "new process",
-                     Signal = "usertasksample5",
-                     UIDefinition = "{\"groups\":[{\"name\":\"demo start\",\"layoutHint\":\"\",\"subGroups\":[{\"layoutHint\":\"\",\"index\":1,\"items\":[{\"index\":1,\"span\":4,\"path\":\"$.demo1.Lex\",\"typeName\":\"NumberInput\",\"layoutHint\":\"\",\"text\":\"leeftijd\",\"groups\":[],\"customData\":{}},{\"index\":2,\"span\":8,\"path\":\"$.demo1.test2\",\"typeName\":\"TextInput\",\"layoutHint\":\"\",\"text\":\"leeftijd in text\",\"groups\":[],\"customData\":{}}]},{\"layoutHint\":\"\",\"index\":2,\"items\":[{\"index\":1,\"span\":4,\"path\":\"$.demo1.test1\",\"typeName\":\"DateInput\",\"layoutHint\":\"\",\"text\":\"datum\",\"groups\":[],\"customData\":{}},{\"index\":2,\"span\":8,\"path\":\"$.demo1.test2\",\"typeName\":\"TextInput\",\"layoutHint\":\"\",\"text\":\"leeftijd in text\",\"groups\":[],\"customData\":{}}]}]}],\"title\":\"leeftijds vragen\"}",
-                     WorkflowInstanceId = null,
-                     EngineId = serverContext.EngineId,
-                     TaskDescription="starting a process with a user task",
-                     TaskName = "start process by usertask",
-                 }
-             };
-
+                    foreach (var activity in workflowBlueprintWrapper.Filter<UserTaskSignal>().Where(a => a.ActivityBlueprint.Id == trigger.ActivityId))
+                    {
+                        viewmodelResult.Add(new UsertaskViewModel
+                        {
+                            TaskTitle = await activity.EvaluatePropertyValueAsync(x => x.TaskTitle, cancellationToken),
+                            Signal = await activity.EvaluatePropertyValueAsync(x => x.Signal, cancellationToken),
+                            UIDefinition = await activity.EvaluatePropertyValueAsync(x => x.UIDefinition, cancellationToken),
+                            WorkflowInstanceId = null,
+                            EngineId = serverContext.EngineId,
+                            TaskDescription = await activity.EvaluatePropertyValueAsync(x => x.TaskDescription, cancellationToken),
+                            TaskName = await activity.EvaluatePropertyValueAsync(x => x.TaskName, cancellationToken),
+                        });
+                    }
+                }
+            }
             return Ok(viewmodelResult);
         }
 
