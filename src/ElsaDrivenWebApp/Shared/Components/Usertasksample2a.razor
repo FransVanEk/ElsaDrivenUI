@@ -1,0 +1,41 @@
+﻿@inject UsertaskService userTaskService
+
+@if (Task != null)
+{
+
+    <form>
+        <div class="form-group">
+            <label for="exampleInputstreet">Street</label>
+            <input type="text" @bind=data.Street class="form-control" id="exampleInputStreet" placeholder="Enter street name">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputZipcode">Zipcode</label>
+            <input type="text" @bind=data.Zipcode class="form-control" id="exampleInputZipcode" placeholder="Enter zipcode">
+        </div>
+        <button @onclick="() => SendSignalAndData()">Continue</button>
+    </form>
+}
+
+@code {
+
+    [Parameter]
+    public EventCallback OnFinished { get; set; }
+
+    [Parameter]
+    public UsertaskViewModel Task { get; set; }
+
+    UsertaskSample2DataModel data = new UsertaskSample2DataModel();
+
+    private async Task SendSignalAndData()
+    {
+        await userTaskService.MarkAsComplete(Task.WorkflowInstanceId, Task.Signal, JsonConvert.SerializeObject(data));
+        await OnFinished.InvokeAsync();
+        Task = null;
+    }
+
+    class UsertaskSample2DataModel
+    {
+        public string Street { get; set; } = string.Empty;
+        public string Zipcode { get; set; } = string.Empty;
+    }
+}

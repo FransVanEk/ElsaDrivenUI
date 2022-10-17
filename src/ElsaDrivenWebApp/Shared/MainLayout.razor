@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+
+@using Radzen
+@using Radzen.Blazor
+
+@inject NavigationManager UriHelper;
+@inject DialogService DialogService ;
+@inject TooltipService TooltipService ;
+@inject ContextMenuService ContextMenuService ;
+@inject NotificationService NotificationService ;
+
+<PageTitle>ElsaDrivenWebApp</PageTitle>
+
+<RadzenDialog />
+<RadzenNotification />
+<RadzenTooltip />
+<RadzenContextMenu />
+
+<RadzenLayout>
+  <ChildContent>
+    <RadzenBody @ref="contentBody">
+      <ChildContent>
+        <RadzenContentContainer Name="main">
+        @Body
+        </RadzenContentContainer>
+      </ChildContent>
+    </RadzenBody>
+    <RadzenSidebar @ref="navBar">
+      <ChildContent>
+       <NavMenu />
+      </ChildContent>
+    </RadzenSidebar>
+  </ChildContent>
+</RadzenLayout>
+
+@code {
+
+    protected RadzenBody? contentBody;
+    protected RadzenSidebar? navBar;
+
+    protected async System.Threading.Tasks.Task SidebarToggle0Click(dynamic args)
+    {
+        await InvokeAsync(() => { navBar?.Toggle(); });
+
+        await InvokeAsync(() => { contentBody?.Toggle(); });
+    }
+
+}
