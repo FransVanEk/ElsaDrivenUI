@@ -128,13 +128,13 @@ namespace UserTask.AddOns.Endpoints
             using var scope = scopeFactory.CreateScope();
 
             var triggerResults = await triggerFinder.FindTriggersByTypeAsync(typeof(UserTaskSignalBookmark).GetSimpleAssemblyQualifiedName(), "");
-            var ids = triggerResults.Select(x => new { WorkflowDefinitionId = x.WorkflowDefinitionId , ActivityId = x.ActivityId }).ToList();
+            var ids = triggerResults.Select(x => new { WorkflowDefinitionId = x.WorkflowDefinitionId, ActivityId = x.ActivityId }).ToList();
             var workflowBlueprintReflector = scope.ServiceProvider.GetRequiredService<IWorkflowBlueprintReflector>();
-              var viewmodelResult = new List<UsertaskViewModel>();
+            var viewmodelResult = new List<UsertaskViewModel>();
 
             foreach (var trigger in ids)
             {
-                var blueprints = await workflowRegistry.FindManyByDefinitionIds(new List<string> { trigger.WorkflowDefinitionId }, VersionOptions.All, cancellationToken);
+                var blueprints = await workflowRegistry.FindManyByDefinitionIds(new List<string> { trigger.WorkflowDefinitionId }, VersionOptions.LatestOrPublished, cancellationToken);
                 foreach (var blueprint in blueprints)
                 {
 
